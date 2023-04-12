@@ -34,6 +34,9 @@ namespace VSToolStrip
         public event EventHandler? CheckedChanged;
         public event EventHandler? HighlightedChanged;
 
+        public void SuspendLayout() => _control.SuspendLayout();
+        public void ResumeLayout() => _control.ResumeLayout();
+
         public virtual Color DefaultForeColor { get; set; } = SystemColors.ControlText;
         public virtual Font DefaultFont { get; set; } = new("Segoe UI", 9F, FontStyle.Regular);
 
@@ -113,7 +116,20 @@ namespace VSToolStrip
         protected override void OnPaint(PaintEventArgs e)
         {
             this.Owner.Renderer.DrawItemBackground(new(e.Graphics, this));
-            base.OnPaint(e);
+            this.Owner.Renderer.DrawItemText(
+                new(
+                    e.Graphics, 
+                    this, 
+                    this.Text, 
+                    new Rectangle(
+                        this._control.label.Location.X, 
+                        this._control.label.Location.Y,
+                        this._control.label.Width, 
+                        this._control.label.Height),
+                    this.ForeColor, 
+                    this.Font, 
+                    System.Drawing.ContentAlignment.MiddleLeft));
+            //base.OnPaint(e);
         }
 
         protected override void OnClick(EventArgs e)

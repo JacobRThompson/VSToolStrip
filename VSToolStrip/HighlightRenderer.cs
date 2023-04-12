@@ -9,7 +9,9 @@ using System.Windows.Forms;
 namespace VSToolStrip
 {
     public class ToolStripHighlightRenderer : ToolStripProfessionalRenderer
-    {
+    {       
+        const float HOT_OPACITY = 0.33f;
+
         protected override void OnRenderItemBackground(ToolStripItemRenderEventArgs e)
         {
             //To Do: call OnRenderButtonBackground() when control is not highlighted
@@ -24,7 +26,9 @@ namespace VSToolStrip
                         if (control.Highlighted)
                         {
                             backgroundColor = SystemColors.MenuHighlight;
-                            outlineColor = SystemColors.MenuHighlight;
+                            outlineColor = control.Checked ?
+                                Utils.LerpColors(Color.Black, ProfessionalColors.ButtonCheckedHighlightBorder, .25f) :
+                                backgroundColor;
                         }
                         else
                         {
@@ -38,8 +42,10 @@ namespace VSToolStrip
                     case PushButtonState.Hot:
                         if (control.Highlighted)
                         {
-                            backgroundColor = Color.DarkTurquoise;
-                            outlineColor = SystemColors.MenuHighlight;
+                            backgroundColor = Utils.LerpColors(SystemColors.MenuHighlight, control.Owner.BackColor, HOT_OPACITY);
+                            outlineColor = control.Checked ?
+                                Utils.LerpColors(Color.Black, ProfessionalColors.ButtonCheckedHighlightBorder, .25f) :
+                                backgroundColor;
                         }
                         else
                         {
@@ -53,7 +59,7 @@ namespace VSToolStrip
                     case PushButtonState.Pressed:
                         if (control.Highlighted)
                         {
-                            backgroundColor = Color.FromArgb(75, SystemColors.MenuHighlight);
+                            backgroundColor = Utils.LerpColors(SystemColors.MenuHighlight , control.Owner.BackColor, 1f -HOT_OPACITY);
                             outlineColor = SystemColors.MenuHighlight;
                         }
                         else
@@ -82,18 +88,20 @@ namespace VSToolStrip
             {
                 base.OnRenderItemBackground(e);
             }
+        
         }
-
-        /*
+        
         protected override void OnRenderItemText(ToolStripItemTextRenderEventArgs e)
         {
-            if (e.Item is IHighlightRenderableButton control && control.Highlighted)
+            if (e.Item is IHighlightable control && control.Highlighted)
             {
-                e.Graphics.DrawString(e.Text, e.TextFont, new SolidBrush(Color.Fuchsia), e.TextRectangle);
+                e.Graphics.DrawString(e.Text, e.TextFont, new SolidBrush(SystemColors.HighlightText), e.TextRectangle);
             }
-
-            base.OnRenderItemText(e);
+            else
+            {
+                base.OnRenderItemText(e);
+            }   
         }
-        */
+        
     }
 }

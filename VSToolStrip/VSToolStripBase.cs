@@ -201,7 +201,7 @@ namespace VSToolStrip
             base.OnPaint(e);
         }
 
-       
+
 
     }
 }

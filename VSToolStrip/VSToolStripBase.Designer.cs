@@ -1,4 +1,6 @@
-﻿namespace VSToolStrip
+﻿using VSToolStrip.TSPaint;
+
+namespace VSToolStrip
 {
     partial class VSToolStripBase
     {
@@ -29,7 +31,7 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(VSToolStripBase));
-            label = new Label();
+            label = new TSPaintLabel();
             flowLayoutPanel1 = new FlowLayoutPanel();
             PinToggle = new IconButtons.IconToggleButton();
             CloseButton = new IconButtons.IconPushButton();
@@ -118,9 +120,9 @@
 
         #endregion
 
-        private Label label;
+        public TSPaintLabel label;
         private FlowLayoutPanel flowLayoutPanel1;
-        private IconButtons.IconToggleButton PinToggle;
-        private IconButtons.IconPushButton CloseButton;
+        public IconButtons.IconToggleButton PinToggle;
+        public IconButtons.IconPushButton CloseButton;
     }
 }
