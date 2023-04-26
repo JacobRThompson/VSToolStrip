@@ -5,15 +5,30 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms.VisualStyles;
+using VS.ToolStrip;
 
 namespace VSToolStrip.IconButtons
 {
-    public abstract class IconControl: PictureBox
+    public abstract class IconControl: PictureBox, IHighlightable
     {
         protected const string IMAGE_CATEGORY = "Image";
 
         private PushButtonState _buttonState = PushButtonState.Normal;
+        private bool _highlighted = false;
 
+
+        public event EventHandler? HighlightedChanged;
+
+        public bool Highlighted
+        {
+            get => _highlighted;
+            set
+            {
+                _highlighted = value;
+                OnHighlightChanged(EventArgs.Empty);
+            }
+        }
+      
         protected virtual PushButtonState ButtonState
         {
             get => _buttonState;
@@ -22,13 +37,16 @@ namespace VSToolStrip.IconButtons
                 if (value != ButtonState)
                 {
                     _buttonState = value;
-                    PaintState();
+                    Invalidate();
                 }
             }
         }
 
-        abstract protected void PaintState();
-      
+        protected virtual void OnHighlightChanged(EventArgs e)
+        {
+            Invalidate();
+            HighlightedChanged?.Invoke(this, e);
+        }
 
         protected override void OnMouseEnter(EventArgs e)
         {

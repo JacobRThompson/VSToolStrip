@@ -4,10 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace VSToolStrip
+namespace VS.ToolStrip
 {
     public interface IHighlightable
     {
-        public bool Highlighted { get; set;}
+
+        public event EventHandler HighlightedChanged;
+
+        public bool Highlighted { get; set; }
+
     }
 }

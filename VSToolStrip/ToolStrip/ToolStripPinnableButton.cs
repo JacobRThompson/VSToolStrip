@@ -4,14 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace VSToolStrip
+namespace VS.ToolStrip
 {
     public class ToolStripPinnableButton : ToolStripButton, IPinnable
     {
 
         private bool _pinned = false;
 
-       
+
         public event EventHandler? PinnedChanged;
 
         public bool Pinned
@@ -39,7 +39,7 @@ namespace VSToolStrip
             get => base.Visible;
             set
             {
-                if (!Pinned){base.Visible = value;}
+                if (!Pinned) { base.Visible = value; }
             }
         }
     }

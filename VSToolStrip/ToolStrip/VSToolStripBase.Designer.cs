@@ -1,4 +1,4 @@
-﻿using VSToolStrip.TSPaint;
+﻿using VS.ToolStrip;
 
 namespace VSToolStrip
 {
@@ -31,7 +31,7 @@ namespace VSToolStrip
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(VSToolStripBase));
-            label = new TSPaintLabel();
+            label = new HighlightLabel();
             flowLayoutPanel1 = new FlowLayoutPanel();
             PinToggle = new IconButtons.IconToggleButton();
             CloseButton = new IconButtons.IconPushButton();
@@ -44,6 +44,7 @@ namespace VSToolStrip
             // 
             label.AutoSize = true;
             label.BackColor = Color.Transparent;
+            label.Highlighted = false;
             label.Location = new Point(3, 3);
             label.Margin = new Padding(3, 3, 0, 0);
             label.Name = "label";
@@ -62,7 +63,7 @@ namespace VSToolStrip
             flowLayoutPanel1.Location = new Point(0, 0);
             flowLayoutPanel1.Margin = new Padding(0);
             flowLayoutPanel1.Name = "flowLayoutPanel1";
-            flowLayoutPanel1.Size = new Size(77, 21);
+            flowLayoutPanel1.Size = new Size(72, 21);
             flowLayoutPanel1.TabIndex = 0;
             // 
             // PinToggle
@@ -74,14 +75,15 @@ namespace VSToolStrip
             PinToggle.DefaultUncheckedImage = Properties.Resources.Unpinned;
             PinToggle.DisabledCheckedImage = (Image)resources.GetObject("PinToggle.DisabledCheckedImage");
             PinToggle.DisabledUncheckedImage = (Image)resources.GetObject("PinToggle.DisabledUncheckedImage");
+            PinToggle.Highlighted = false;
             PinToggle.HotCheckedImage = Properties.Resources.PinnedHot;
             PinToggle.HotUncheckedImage = Properties.Resources.UnpinnedHot;
-            PinToggle.Location = new Point(41, 3);
-            PinToggle.Margin = new Padding(0, 3, 0, 3);
+            PinToggle.Location = new Point(41, 4);
+            PinToggle.Margin = new Padding(0, 4, 1, 4);
             PinToggle.Name = "PinToggle";
             PinToggle.PressedCheckedImage = Properties.Resources.PinnedPushed;
             PinToggle.PressedUncheckedImage = Properties.Resources.UnpinnedPushed;
-            PinToggle.Size = new Size(15, 15);
+            PinToggle.Size = new Size(13, 13);
             PinToggle.TabIndex = 3;
             PinToggle.TabStop = false;
             // 
@@ -91,11 +93,13 @@ namespace VSToolStrip
             CloseButton.BackgroundImageLayout = ImageLayout.Stretch;
             CloseButton.DefaultImage = Properties.Resources.CloseTab;
             CloseButton.DisabledImage = (Image)resources.GetObject("CloseButton.DisabledImage");
+            CloseButton.Highlighted = false;
             CloseButton.HotImage = Properties.Resources.CloseTabHot;
-            CloseButton.Location = new Point(59, 3);
+            CloseButton.Location = new Point(56, 4);
+            CloseButton.Margin = new Padding(1, 4, 3, 4);
             CloseButton.Name = "CloseButton";
             CloseButton.PressedImage = Properties.Resources.CloseTabPushed;
-            CloseButton.Size = new Size(15, 15);
+            CloseButton.Size = new Size(13, 13);
             CloseButton.TabIndex = 4;
             CloseButton.TabStop = false;
             CloseButton.Click += CloseButton_Click;
@@ -106,10 +110,10 @@ namespace VSToolStrip
             AutoScaleMode = AutoScaleMode.Font;
             AutoSize = true;
             AutoSizeMode = AutoSizeMode.GrowAndShrink;
-            BackColor = SystemColors.ControlLight;
+            BackColor = Color.Transparent;
             Controls.Add(flowLayoutPanel1);
             Name = "VSToolStripBase";
-            Size = new Size(77, 21);
+            Size = new Size(72, 21);
             flowLayoutPanel1.ResumeLayout(false);
             flowLayoutPanel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)PinToggle).EndInit();
@@ -120,7 +124,7 @@ namespace VSToolStrip
 
         #endregion
 
-        public TSPaintLabel label;
+        public HighlightLabel label;
         private FlowLayoutPanel flowLayoutPanel1;
         public IconButtons.IconToggleButton PinToggle;
         public IconButtons.IconPushButton CloseButton;

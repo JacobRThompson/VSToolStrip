@@ -4,12 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace VSToolStrip.TSPaint
+namespace VS.ToolStrip
 {
-    public class TSPaintLabel: Label
+    public interface IPinnable
     {
-        protected override void OnPaint(PaintEventArgs e){}
+        event EventHandler? PinnedChanged;
 
-       
+        bool Pinned { get; set; }
+
     }
 }

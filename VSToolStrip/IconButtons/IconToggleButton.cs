@@ -38,32 +38,22 @@ namespace VSToolStrip.IconButtons
             }
         }
 
-        protected override void PaintState()
+        public override Image BackgroundImage 
         {
-            switch (ButtonState)
+            get => ButtonState switch
             {
-                case PushButtonState.Normal:
-                    base.BackgroundImage = Checked ? DefaultCheckedImage : DefaultUncheckedImage;
-                    break;
-
-                case PushButtonState.Hot:
-                    base.BackgroundImage = Checked ? HotCheckedImage : HotUncheckedImage;
-                    break;
-
-                case PushButtonState.Pressed:
-                    base.BackgroundImage = Checked ? PressedCheckedImage : PressedUncheckedImage;
-                    break;
-
-                case PushButtonState.Disabled:
-                    base.BackgroundImage = Checked ? DisabledCheckedImage : DisabledUncheckedImage;
-                    break;
-            }
+                PushButtonState.Hot => Checked ? HotCheckedImage : HotUncheckedImage,
+                PushButtonState.Pressed => Checked ? PressedCheckedImage : PressedUncheckedImage,
+                PushButtonState.Disabled => Checked ? DisabledCheckedImage : DisabledUncheckedImage,
+                _ => Checked ? DefaultCheckedImage : DefaultUncheckedImage
+            }; 
+            set => base.BackgroundImage = value; 
         }
 
         protected virtual void OnCheckedChanged(EventArgs e)
         {
             CheckedChanged?.Invoke(this, e);
-            PaintState();
+            Invalidate();
         }
 
         protected override void OnClick(EventArgs e)

@@ -12,13 +12,17 @@ using VSToolStrip.Properties;
 using System.Windows.Forms.VisualStyles;
 using static System.Windows.Forms.AxHost;
 using System.Buffers;
+using VS.ToolStrip;
 
 namespace VSToolStrip
 {
-    public partial class VSToolStripBase : UserControl, VSToolStrip.IPinnable
+    public partial class VSToolStripBase : UserControl, VS.ToolStrip.IPinnable, IHighlightable
     {
+        const int ICON_DEFAULT_SIZE = 15;
 
-
+        private int _iconMargin = 1;
+        private bool _highlighted = false;
+        private bool _showIcons = true;
         private PushButtonState _buttonState = PushButtonState.Normal;
 
         private bool _checked = false;
@@ -45,6 +49,8 @@ namespace VSToolStrip
 
             CloseButton.MouseEnter += (object? sender, EventArgs e) => OnMouseEnter(e);
             CloseButton.MouseLeave += (object? sender, EventArgs e) => OnMouseLeave(e);
+
+            this.DoubleBuffered = true;
         }
 
         private void Label_Click(object? sender, EventArgs e)
@@ -54,10 +60,48 @@ namespace VSToolStrip
 
         public event EventHandler? PinnedChanged;
         public event EventHandler? CheckedChanged;
+        public event EventHandler? HighlightedChanged;
 
-        public Rectangle TextRectangle => label.Bounds;
 
         public bool HasMouse => Bounds.Contains(this.Parent.PointToClient(Cursor.Position));
+
+        [DefaultValue(true)]
+        public bool ShowIcons
+        {
+            get => _showIcons;
+            set
+            {
+                if (_showIcons != value)
+                {
+                    _showIcons = value;
+
+                    SuspendLayout();
+                    PinToggle.Visible = value;
+                    CloseButton.Visible = value;
+                    ResumeLayout();
+                }
+            }
+        }
+
+        [DefaultValue(1)]
+        public int IconMargin
+        {
+            get => _iconMargin;
+            set
+            {
+                if (_iconMargin != value)
+                {
+                    _iconMargin = value;
+                    SuspendLayout();
+                    PinToggle.Size = new Size(ICON_DEFAULT_SIZE - 2 * _iconMargin, ICON_DEFAULT_SIZE - 2 * _iconMargin);
+                    PinToggle.Margin = new(0, _iconMargin + 3, _iconMargin, _iconMargin + 3);
+
+                    CloseButton.Size = new Size(ICON_DEFAULT_SIZE - 2 * _iconMargin, ICON_DEFAULT_SIZE - 2 * _iconMargin);
+                    CloseButton.Margin = new(3, _iconMargin + 3, _iconMargin, _iconMargin + 3);
+                    ResumeLayout();
+                }
+            }
+        }
 
         public bool Checked
         {
@@ -123,8 +167,26 @@ namespace VSToolStrip
             }
         }
 
+        public bool Highlighted
+        {
+            get => _highlighted;
+            set
+            {
+                _highlighted = value;
+                OnHighlightedChanged(EventArgs.Empty);
+            }
+        }
+
+        private void CloseButton_Click(object sender, EventArgs e) => this.Hide();
 
         public new void Hide() => base.Visible = false;
+
+        protected virtual void OnHighlightedChanged(EventArgs e)
+        {
+            label.Highlighted = this.Highlighted;
+            Invalidate();
+            HighlightedChanged?.Invoke(this, e);
+        }
 
 
         protected override void OnMouseLeave(EventArgs e)
@@ -174,34 +236,71 @@ namespace VSToolStrip
             CheckedChanged?.Invoke(this, e);
         }
 
-        private void CloseButton_Click(object sender, EventArgs e) => this.Hide();
 
-        protected override void OnPaint(PaintEventArgs e)
+        protected override void OnPaintBackground(PaintEventArgs e)
         {
+            const float HOT_OPACITY = 0.33f;
 
-            /*
-            //this.BackColor = Application.RenderWithVisualStyles ? Color.Azure : this.Parent.BackColor;
-            //ButtonRenderer.DrawParentBackground(e.Graphics, Bounds, this);
-            ButtonRenderer.DrawButton(
-                e.Graphics,
-                new(0, 0, this.Width, this.Height),
-                string.Empty,
-                this.Font, ButtonState == PushButtonState.Pressed,
-                this.ButtonState);
+            Color backgroundColor;
+            Color outlineColor;
 
-            if (Checked)
+            switch (ButtonState)
             {
-                ControlPaint.DrawBorder(
-                    e.Graphics,
-                    new(0, 0, this.Width, this.Height),
-                    Color.Red,
-                    ButtonBorderStyle.Solid);
+                case PushButtonState.Hot:
+                    if (Highlighted)
+                    {
+                        backgroundColor = Utils.Lerp(SystemColors.MenuHighlight, Parent.BackColor, HOT_OPACITY);
+                        outlineColor = this.Checked ?
+                            Utils.Lerp(Color.Black, ProfessionalColors.ButtonCheckedHighlightBorder, .25f) :
+                            backgroundColor;
+                    }
+                    else
+                    {
+                        backgroundColor = ProfessionalColors.ButtonSelectedHighlight;
+                        outlineColor = this.Checked ?
+                            ProfessionalColors.ButtonCheckedHighlightBorder :
+                            ProfessionalColors.ButtonSelectedHighlightBorder;
+                    }
+                    break;
+
+                case PushButtonState.Pressed:
+                    if (Highlighted)
+                    {
+                        backgroundColor = Utils.Lerp(SystemColors.MenuHighlight, Parent.BackColor, 1f - HOT_OPACITY);
+                        outlineColor = SystemColors.MenuHighlight;
+                    }
+                    else
+                    {
+                        backgroundColor = ProfessionalColors.ButtonPressedHighlight;
+                        outlineColor = this.Checked ?
+                            ProfessionalColors.ButtonCheckedHighlightBorder :
+                            ProfessionalColors.ButtonPressedBorder;
+                    }
+                    break;
+
+                default:
+                    if (Highlighted)
+                    {
+                        backgroundColor = SystemColors.MenuHighlight;
+                        outlineColor = this.Checked ?
+                            Utils.Lerp(Color.Black, ProfessionalColors.ButtonCheckedHighlightBorder, .25f) :
+                            SystemColors.InactiveBorder;
+                    }
+                    else
+                    {
+                        backgroundColor = BackColor;
+                        outlineColor = this.Checked ?
+                            ProfessionalColors.ButtonCheckedHighlightBorder :
+                            SystemColors.InactiveBorder;
+                    }
+                    break;
             }
-            */
-            base.OnPaint(e);
+
+            e.Graphics.Clear(backgroundColor);
+            e.Graphics.DrawRectangle(
+                new Pen(outlineColor),
+                new(Point.Empty, this.Size - new Size(1, 1)));
         }
-
-
 
     }
 }

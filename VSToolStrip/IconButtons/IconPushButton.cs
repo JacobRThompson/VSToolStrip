@@ -24,36 +24,27 @@ namespace VSToolStrip.IconButtons
         [Category(IMAGE_CATEGORY)]
         public Image DisabledImage { get; set; } = new Bitmap(1, 1);
 
-        
-        protected override void PaintState()
+
+        public override Image BackgroundImage 
         {
-            this.SuspendLayout();
-            switch (ButtonState)
+            get => ButtonState switch
             {
-                case PushButtonState.Normal:
-                    base.BackgroundImage = DefaultImage;
-                    break;
-
-                case PushButtonState.Hot:
-                    base.BackgroundImage = HotImage;
-                    break;
-
-                case PushButtonState.Pressed:
-                    base.BackgroundImage = PressedImage;
-                    break;
-
-                case PushButtonState.Disabled:
-                    base.BackgroundImage = DisabledImage;
-                    break;
-            }
-            this.ResumeLayout(false);
+                PushButtonState.Hot => HotImage,
+                PushButtonState.Pressed => PressedImage,
+                PushButtonState.Disabled => DisabledImage,
+                _ => base.BackgroundImage
+            }; 
+            set => base.BackgroundImage = value; 
         }
+
 
         protected override void OnHandleCreated(EventArgs e)
         {
             base.OnHandleCreated(e);
             base.BackgroundImage = DefaultImage;
         }
+
+        
     }
 
     

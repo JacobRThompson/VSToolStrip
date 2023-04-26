@@ -5,9 +5,10 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms.VisualStyles;
 
-namespace VSToolStrip
+
+namespace VS.ToolStrip
 {
-    public interface IHighlightRenderableButton: IHighlightable
+    public interface IHighlightRenderableButton : IHighlightable
     {
         public bool Checked { get; set; }
         public Color BackColor { get; set; }
