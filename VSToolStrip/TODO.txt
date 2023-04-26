@@ -1,0 +1,1 @@
+Use ITextProtected for interface that prevents users from highlighting/copying text to clipboard 

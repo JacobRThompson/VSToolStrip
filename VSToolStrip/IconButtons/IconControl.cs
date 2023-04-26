@@ -5,9 +5,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms.VisualStyles;
-using VS.ToolStrip;
 
-namespace VSToolStrip.IconButtons
+namespace Honeycomb.UI.IconButtons
 {
     public abstract class IconControl: PictureBox, IHighlightable
     {

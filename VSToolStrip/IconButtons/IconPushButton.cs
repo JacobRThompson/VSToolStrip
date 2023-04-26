@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms.VisualStyles;
 
-namespace VSToolStrip.IconButtons
+namespace Honeycomb.UI.IconButtons
 {
     public class IconPushButton: IconControl
     {       
