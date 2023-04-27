@@ -58,8 +58,6 @@ namespace Honeycomb.UI.StronglyTypedControls.ComboBoxes
         [Category(Globals.TYPED_CONTROL_ROOT_CATEGORY), DefaultValue("")] public string Suffix { get; set; } = String.Empty;
         [Category(Globals.TYPED_CONTROL_ROOT_CATEGORY), DefaultValue("")] public string Prefix { get; set; } = String.Empty;
 
-        private bool HasMouse { get; set; } = false;
-
         public string Trim(string input) => TrimPrefix(TrimSuffix(input));
 
 
@@ -126,20 +124,10 @@ namespace Honeycomb.UI.StronglyTypedControls.ComboBoxes
         protected override void OnSelectedIndexChanged(EventArgs e)
         {
             //We check if the user was the one who caused the index to change by checking mouse position. Raise validation if it was.
-            if (HasMouse) { OnValidating(new()); }
+            if (this.HasMouse()) { OnValidating(new()); }
             base.OnSelectedIndexChanged(e);
         }
 
-        protected override void OnMouseEnter(EventArgs e)
-        {
-            HasMouse = true;
-            base.OnMouseEnter(e);
-        }
-
-        protected override void OnMouseLeave(EventArgs e)
-        {
-            HasMouse = false;
-            base.OnMouseEnter(e);
-        }
+        
     }
 }

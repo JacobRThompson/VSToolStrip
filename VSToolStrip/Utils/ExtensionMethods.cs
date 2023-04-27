@@ -65,6 +65,8 @@ namespace Honeycomb.UI
             }
         }
 
+        public static bool HasMouse(this Control control, Rectangle clientRegion) => clientRegion.Contains(control.PointToClient(Cursor.Position));
+        public static bool HasMouse(this Control control) => control.HasMouse(control.ClientRectangle);
 
     }
 }

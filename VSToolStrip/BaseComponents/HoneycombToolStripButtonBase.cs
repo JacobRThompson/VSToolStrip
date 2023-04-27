@@ -16,7 +16,7 @@ using System.Windows.Forms.VisualStyles;
 
 namespace Honeycomb.UI.BaseComponents
 {
-    public partial class VSToolStripBase : UserControl, IPinnableUIElement, IHighlightable
+    public partial class HoneycombToolStripButtonBase : UserControl, IPinnableUIElement, IHighlightable
     {
         const int ICON_DEFAULT_SIZE = 15;
 
@@ -27,7 +27,7 @@ namespace Honeycomb.UI.BaseComponents
 
         private bool _checked = false;
 
-        public VSToolStripBase()
+        public HoneycombToolStripButtonBase()
         {
             InitializeComponent();
 
@@ -62,9 +62,7 @@ namespace Honeycomb.UI.BaseComponents
         public event EventHandler? CheckedChanged;
         public event EventHandler? HighlightedChanged;
 
-
-        public bool HasMouse => Bounds.Contains(this.Parent.PointToClient(Cursor.Position));
-
+   
         [DefaultValue(true)]
         public bool ShowIcons
         {
@@ -191,7 +189,7 @@ namespace Honeycomb.UI.BaseComponents
 
         protected override void OnMouseLeave(EventArgs e)
         {
-            if (!this.HasMouse)
+            if (!this.HasMouse())
             {
                 base.OnMouseLeave(e);
                 ButtonState = PushButtonState.Normal;
@@ -200,7 +198,7 @@ namespace Honeycomb.UI.BaseComponents
 
         protected override void OnMouseEnter(EventArgs e)
         {
-            if (this.HasMouse)
+            if (this.HasMouse())
             {
                 base.OnMouseEnter(e);
                 ButtonState = PushButtonState.Hot;

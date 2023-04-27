@@ -28,7 +28,7 @@
     </EmbeddedResource>
   </ItemGroup>
 
-  <ItemGroup>
+  <ItemGroup>	  
     <Using Include="Honeycomb.UI.BaseComponents" />
     <Using Include="Honeycomb.UI.Utils">
       <Static>True</Static>

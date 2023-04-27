@@ -1,6 +1,6 @@
 ﻿namespace Honeycomb.UI.BaseComponents
 {
-    partial class VSToolStripBase
+    partial class HoneycombToolStripButtonBase
     {
         /// <summary> 
         /// Required designer variable.

@@ -12,14 +12,14 @@ using Honeycomb.UI.BaseComponents;
 namespace Honeycomb.UI.ToolStripControls
 {
     [ToolStripItemDesignerAvailability(ToolStripItemDesignerAvailability.ToolStrip)]
-    public class VSToolStripButton : ToolStripControlHost, IPinnableUIElement, IHighlightable
+    public class HoneycombToolStripButton : ToolStripControlHost, IPinnableUIElement, IHighlightable
     {
 
-        private readonly VSToolStripBase _control;
+        private readonly HoneycombToolStripButtonBase _control;
 
-        public VSToolStripButton() : base(new VSToolStripBase())
+        public HoneycombToolStripButton() : base(new HoneycombToolStripButtonBase())
         {
-            _control = (VSToolStripBase)Control;
+            _control = (HoneycombToolStripButtonBase)Control;
             _control.CheckedChanged += (sender, e) => OnCheckedChanged(e);
             _control.PinnedChanged += (sender, e) => OnPinnedChanged(e);
             _control.VisibleChanged += (sender, e) => OnVisibleChanged(e);
@@ -111,12 +111,5 @@ namespace Honeycomb.UI.ToolStripControls
         {
             base.OnClick(e);
         }
-
-        /*
-        protected override void OnPaint(PaintEventArgs e)
-        {
-            Owner.Renderer.DrawItemBackground(new(e.Graphics, this));
-        }
-        */
     }
 }
