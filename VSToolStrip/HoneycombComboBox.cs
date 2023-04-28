@@ -13,16 +13,24 @@ namespace Honeycomb.UI
     public class HoneycombComboBox : ValidateOnEnterComboBox
     {
 
+
+
         private List<Rectangle> itemRectangles = new List<Rectangle>();
-        private int lastHighlightedIndex;
 
-
+        public bool HighlightDropdownItems = true;
 
 
         static bool IS_BOOMER_MODE = true;
         public HoneycombComboBox()
         {
+            
             if (IS_BOOMER_MODE) { DrawMode = DrawMode.OwnerDrawVariable; }
+
+            // Get the internal ListBox using reflection
+           
+
+  
+
         }
 
         protected override void OnMeasureItem(MeasureItemEventArgs e)
@@ -42,11 +50,14 @@ namespace Honeycomb.UI
                 Rectangle itemRectangle = new Rectangle(0, itemTop, Width - SystemInformation.VerticalScrollBarWidth, e.ItemHeight);
                 itemRectangles.Add(itemRectangle);
             }
+
+           
         }
 
 
         protected override void OnMouseMove(MouseEventArgs e)
         {
+            /*
             if (IS_BOOMER_MODE && Items.Count > 0)
             {
                 var dropDownRect = RectangleToScreen(ClientRectangle);
@@ -73,10 +84,16 @@ namespace Honeycomb.UI
                     }
                 }
             }
+            */
 
-            base.OnMouseMove(e);
+
+            base.OnMouseMove(e);          
         }
 
+        protected override void OnDropDown(EventArgs e)
+        {
+            base.OnDropDown(e);
+        }
 
         protected override void OnPaintBackground(PaintEventArgs pevent)
         {
@@ -94,67 +111,33 @@ namespace Honeycomb.UI
 
         }
 
-        protected override void OnDropDown(EventArgs e)
-        {
-            base.OnDropDown(e);
-        }
-
-        protected override void OnDropDownClosed(EventArgs e)
-        {
-            base.OnDropDownClosed(e);
-        }
 
         protected override void OnDrawItem(DrawItemEventArgs e)
         {
             var Brush = Brushes.Black;
-
-            Rectangle itemRectangle = new Rectangle(e.Bounds.Left, e.Bounds.Top, e.Bounds.Width, e.Bounds.Height);
-
             Brush backBrush;
 
-            if (this.HasMouse(itemRectangle))
+            var clientMouse = this.PointToClient(Cursor.Position);
+            var localMouse = clientMouse.Subtract(new(0, 0));
+
+            e.Graphics.DrawLine(new(GenRandomColor(),10), localMouse, Utils.Add(localMouse, new(10,0)));
+
+
+            if (e.Bounds.Contains(localMouse))
             {
-                backBrush = new SolidBrush(
-                    lastHighlightedIndex switch
-                    {
-                        -1=> Color.Fuchsia,
-                        0 => Color.Lime,
-                        1 => Color.Cyan,
-                        2 => Color.Magenta,
-                        3 => Color.Yellow,
-                        _=> Color.Black
-                    });
+                backBrush = new SolidBrush(Color.LightBlue);
             }
             else
             {
-                backBrush = new SolidBrush(
-                    
-                    e.Index switch
-                    {
-                        0=>Color.Orange,
-                        1=>Color.Green,
-                        2=>Color.Blue,
-                        3=>Color.Red,
-                        _=>Color.Purple
-
-                    });
+                backBrush = new SolidBrush(Color.White);
             }
            
             int index = e.Index >= 0 ? e.Index : 0;
-            e.Graphics.FillRectangle(backBrush, itemRectangle);
+            //e.Graphics.FillRectangle(backBrush, e.Bounds);
             e.Graphics.DrawString(Items[index].ToString(), Font, Brush, e.Bounds, StringFormat.GenericDefault);
+            //e.Graphics.DrawRectangle(new(GenRandomColor(),3), e.Bounds.Deflate(new(0,0,3,3)));
         }
 
-        protected override void WndProc(ref Message m)
-        {
-            switch (m.Msg)
-            {
-                
-                default:
-                    base.WndProc(ref m);
-                    break;
-            }
-        }
 
     }
 

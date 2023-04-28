@@ -8,6 +8,8 @@ namespace Honeycomb.UI
 {
     public static partial class Utils
     {
+        private static  Random rng = new ();
+
         public static Color Lerp(Color a, Color b, float amount)
         {
             return Color.FromArgb(
@@ -26,5 +28,7 @@ namespace Honeycomb.UI
         }
 
         public static Color ToOpaque(this Color c) => Color.FromArgb(255, c.R, c.G, c.B);
+
+        public static Color GenRandomColor() => Color.FromArgb(rng.Next(256), rng.Next(256), rng.Next(256));
     }
 }

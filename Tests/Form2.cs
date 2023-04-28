@@ -4,23 +4,21 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Tests
 {
-    public partial class Form1 : Form
+    public partial class Form2 : Form
     {
-        public Form1()
+        public Form2()
         {
+            //Allows us to write to console while inside a form
+            //Program.AllocConsole();
             InitializeComponent();
-            toolStrip1.Renderer = new Honeycomb.UI.BaseComponents.ToolStripLineBreakRenderer();
-        }
 
-        private void button1_Click(object sender, EventArgs e)
-        {
-            toolStrip1.Visible = !toolStrip1.Visible;
         }
     }
 }
