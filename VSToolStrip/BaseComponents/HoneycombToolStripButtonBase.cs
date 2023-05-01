@@ -101,6 +101,9 @@ namespace Honeycomb.UI.BaseComponents
             }
         }
 
+        [DefaultValue(true)]
+        public virtual bool CheckOnClick { get; set; } = true;
+
         public bool Checked
         {
             get => _checked;
@@ -220,7 +223,8 @@ namespace Honeycomb.UI.BaseComponents
         protected override void OnClick(EventArgs e)
         {
             base.OnClick(e);
-            Checked = !Checked;
+            if (CheckOnClick)
+                Checked = !Checked;
         }
 
         protected virtual void OnPinnedChanged(EventArgs e)

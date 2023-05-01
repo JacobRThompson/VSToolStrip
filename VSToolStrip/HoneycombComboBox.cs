@@ -11,7 +11,7 @@ using System.Xml.Serialization;
 namespace Honeycomb.UI
 {
 
-    public class HoneycombComboBox : ValidateOnEnterComboBox
+    public class HoneycombComboBox : MessageComboBox
     {
 
         //This is only used for ComboBoxes with DropDownStyle = DropDown
@@ -27,7 +27,8 @@ namespace Honeycomb.UI
         private Action<DrawItemEventArgs> _onDrawItemAction = delegate { };
 
         public HoneycombComboBox()
-        {  
+        {
+            
             OnDropDownStyleChanged(EventArgs.Empty); //Initialize event handlers
         }
 

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace Honeycomb.UI.StronglyTypedControls.ComboBoxes
 {
     [ToolboxItem(Globals.SHOW_BASE_COMPONENTS_IN_TOOLBOX)]
-    public class BooleanComboBox : BaseComponents.MessageComboBox, IStronglyTypedComboBox<bool>
+    public class BooleanComboBox : HoneycombComboBox, IStronglyTypedComboBox<bool>
     {
         const string YES = "Yes";
         const string NO = "No";

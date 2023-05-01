@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.ComponentModel;
 namespace Honeycomb.UI.StronglyTypedControls.ComboBoxes
 {
-    public  class NumericComboBox<TInput> : BaseComponents.MessageComboBox, INumericControl<TInput>, IStronglyTypedComboBox<TInput> where TInput :struct, IFormattable, IEquatable<TInput>
+    public  class NumericComboBox<TInput> : HoneycombComboBox, INumericControl<TInput>, IStronglyTypedComboBox<TInput> where TInput :struct, IFormattable, IEquatable<TInput>
     {
         private List<TInput> _values = new();
         private TInput _value = new();

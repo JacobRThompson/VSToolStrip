@@ -55,6 +55,13 @@ namespace Honeycomb.UI.ToolStripControls
             set => _control.ButtonState = value;
         }
 
+  
+        public virtual bool CheckOnClick 
+        { 
+            get => _control.CheckOnClick; 
+            set => _control.CheckOnClick = value; 
+        } 
+
         public override Color ForeColor
         {
             get => base.ForeColor;
@@ -104,7 +111,7 @@ namespace Honeycomb.UI.ToolStripControls
         protected virtual void OnPinnedChanged(EventArgs e) => PinnedChanged?.Invoke(this, e);
         protected virtual void OnHighlighedChanged(EventArgs e) => HighlightedChanged?.Invoke(this, e);
 
-
+       
         public void Hide() => _control.Hide();
 
         protected override void OnClick(EventArgs e)

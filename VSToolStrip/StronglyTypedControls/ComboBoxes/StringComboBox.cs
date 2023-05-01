@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace Honeycomb.UI.StronglyTypedControls.ComboBoxes
 {
     [ToolboxItem(Globals.SHOW_BASE_COMPONENTS_IN_TOOLBOX)]
-    public class StringComboBox: BaseComponents.MessageComboBox
+    public class StringComboBox: HoneycombComboBox
     {
         private List<string> _values = new();
         private string _value = string.Empty;
