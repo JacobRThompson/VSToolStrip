@@ -6,9 +6,12 @@ using System.Threading.Tasks;
 
 namespace Honeycomb.UI
 {
-    public static partial class Utils
+    public static partial class Utils 
     {
-        private static  Random rng = new ();
+        public static Point Subtract(this Point p1, Point p2) => new(p1.X - p2.X, p1.Y - p2.Y);
+        public static Point  Add(this Point p1, Point p2) => new(p1.X + p2.X, p1.Y + p2.Y);
+
+        private static Random rng = new();
 
         public static Color Lerp(Color a, Color b, float amount)
         {
@@ -31,4 +34,5 @@ namespace Honeycomb.UI
 
         public static Color GenRandomColor() => Color.FromArgb(rng.Next(256), rng.Next(256), rng.Next(256));
     }
+
 }

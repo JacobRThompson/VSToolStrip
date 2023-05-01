@@ -16,7 +16,7 @@ namespace Tests
         public Form2()
         {
             //Allows us to write to console while inside a form
-            //Program.AllocConsole();
+            Program.AllocConsole();
             InitializeComponent();
 
         }

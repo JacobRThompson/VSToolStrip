@@ -28,37 +28,42 @@
         /// </summary>
         private void InitializeComponent()
         {
-            honeycombComboBox1 = new HoneycombComboBox();
-            comboBox1 = new ComboBox();
+            honeycombListBox1 = new HoneycombListBox();
+            honeycombComboBox_bad1 = new HoneycombComboBox();
             SuspendLayout();
             // 
-            // honeycombComboBox1
+            // honeycombListBox1
             // 
-            honeycombComboBox1.DrawMode = DrawMode.OwnerDrawVariable;
-            honeycombComboBox1.Font = new Font("Segoe UI", 20F, FontStyle.Regular, GraphicsUnit.Point);
-            honeycombComboBox1.FormattingEnabled = true;
-            honeycombComboBox1.Items.AddRange(new object[] { "once", "upon", "a", "time" });
-            honeycombComboBox1.Location = new Point(146, 125);
-            honeycombComboBox1.Name = "honeycombComboBox1";
-            honeycombComboBox1.Size = new Size(195, 44);
-            honeycombComboBox1.TabIndex = 0;
+            honeycombListBox1.DrawMode = DrawMode.OwnerDrawFixed;
+            honeycombListBox1.FormattingEnabled = true;
+            honeycombListBox1.HorizontalScrollbar = true;
+            honeycombListBox1.ItemHeight = 25;
+            honeycombListBox1.Items.AddRange(new object[] { "once", "upon", "a", "time" });
+            honeycombListBox1.Location = new Point(129, 169);
+            honeycombListBox1.Margin = new Padding(0);
+            honeycombListBox1.Name = "honeycombListBox1";
+            honeycombListBox1.Size = new Size(169, 104);
+            honeycombListBox1.TabIndex = 0;
             // 
-            // comboBox1
+            // honeycombComboBox_bad1
             // 
-            comboBox1.FormattingEnabled = true;
-            comboBox1.Items.AddRange(new object[] { "once", "upon", "a", "time" });
-            comboBox1.Location = new Point(392, 125);
-            comboBox1.Name = "comboBox1";
-            comboBox1.Size = new Size(171, 23);
-            comboBox1.TabIndex = 1;
+            honeycombComboBox_bad1.DrawMode = DrawMode.OwnerDrawFixed;
+            honeycombComboBox_bad1.DropDownStyle = ComboBoxStyle.DropDownList;
+            honeycombComboBox_bad1.FormattingEnabled = true;
+            honeycombComboBox_bad1.Items.AddRange(new object[] { "once", "upon", "a", "time" });
+            honeycombComboBox_bad1.Location = new Point(442, 227);
+            honeycombComboBox_bad1.Name = "honeycombComboBox_bad1";
+            honeycombComboBox_bad1.Size = new Size(266, 32);
+            honeycombComboBox_bad1.TabIndex = 1;
             // 
             // Form2
             // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(800, 450);
-            Controls.Add(comboBox1);
-            Controls.Add(honeycombComboBox1);
+            ClientSize = new Size(1143, 750);
+            Controls.Add(honeycombComboBox_bad1);
+            Controls.Add(honeycombListBox1);
+            Margin = new Padding(4, 5, 4, 5);
             Name = "Form2";
             Text = "Form2";
             ResumeLayout(false);
@@ -66,7 +71,7 @@
 
         #endregion
 
-        private HoneycombComboBox honeycombComboBox1;
-        private ComboBox comboBox1;
+        private HoneycombListBox honeycombListBox1;
+        private HoneycombComboBox honeycombComboBox_bad1;
     }
 }

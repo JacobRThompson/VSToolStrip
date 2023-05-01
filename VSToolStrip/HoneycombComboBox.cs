@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
 
 namespace Honeycomb.UI
 {
@@ -13,131 +14,122 @@ namespace Honeycomb.UI
     public class HoneycombComboBox : ValidateOnEnterComboBox
     {
 
+        //This is only used for ComboBoxes with DropDownStyle = DropDown
+        private readonly Dictionary<int, bool> AllowHighlights = new();
 
+        //This is only used for ComboBoxes with DropDownStyle = DropDownList
+        private (int Index, string Text, Rectangle Bounds) _lastHighlighted = (-1, string.Empty, Rectangle.Empty);
+        private bool _openingDropdown;
+        private bool _dropdownOpen;
 
-        private List<Rectangle> itemRectangles = new List<Rectangle>();
+        private Action<EventArgs> _onDropDownClosedAction = delegate { };
+        private Action<EventArgs> _onDropDownAction = delegate { };
+        private Action<DrawItemEventArgs> _onDrawItemAction = delegate { };
 
-        public bool HighlightDropdownItems = true;
-
-
-        static bool IS_BOOMER_MODE = true;
         public HoneycombComboBox()
+        {  
+            OnDropDownStyleChanged(EventArgs.Empty); //Initialize event handlers
+        }
+
+        protected override void OnDropDownStyleChanged(EventArgs e)
         {
-            
-            if (IS_BOOMER_MODE) { DrawMode = DrawMode.OwnerDrawVariable; }
+            base.OnDropDownStyleChanged(e);
 
-            // Get the internal ListBox using reflection
-           
+            switch (DropDownStyle)
+            {
+                case ComboBoxStyle.DropDownList:
+                    DrawMode = DrawMode.OwnerDrawFixed;
+                    _onDropDownAction = OnDropDown_DropDownList;
+                    _onDrawItemAction = OnDrawItem_DropDownList;
+                    _onDropDownClosedAction = OnDropDownClosed_DropDownList;
+                    break;
 
-  
+                default:
+                    DrawMode = default;
+                    _onDropDownAction = base.OnDropDown;
+                    _onDrawItemAction = base.OnDrawItem; 
+                    _onDropDownClosedAction = base.OnDropDownClosed;
+                    break;
+            }
 
         }
 
-        protected override void OnMeasureItem(MeasureItemEventArgs e)
+
+        protected override void OnDropDownClosed(EventArgs e)
         {
-            base.OnMeasureItem(e);
-
-            if (e.Index >= 0 && e.Index < Items.Count)
-            {
-                SizeF stringSize = e.Graphics.MeasureString(Items[e.Index].ToString(), Font);
-                e.ItemHeight = (int)stringSize.Height;
-
-                int itemTop = 0;
-                if (e.Index > 0)
-                {
-                    itemTop = itemRectangles[e.Index - 1].Bottom;
-                }
-                Rectangle itemRectangle = new Rectangle(0, itemTop, Width - SystemInformation.VerticalScrollBarWidth, e.ItemHeight);
-                itemRectangles.Add(itemRectangle);
-            }
-
-           
-        }
-
-
-        protected override void OnMouseMove(MouseEventArgs e)
-        {
-            /*
-            if (IS_BOOMER_MODE && Items.Count > 0)
-            {
-                var dropDownRect = RectangleToScreen(ClientRectangle);
-                dropDownRect.Y += Height;
-                dropDownRect.Height = DropDownHeight;
-
-                if (dropDownRect.Contains(e.Location))
-                {
-                    int itemIndex = -1;
-
-                    for (int i = 0; i < itemRectangles.Count; i++)
-                    {
-                        if (itemRectangles[i].Contains(e.Location))
-                        {
-                            itemIndex = i;
-                            break;
-                        }
-                    }
-
-                    if (itemIndex != lastHighlightedIndex)
-                    {
-                        lastHighlightedIndex = itemIndex;
-                        Invalidate();
-                    }
-                }
-            }
-            */
-
-
-            base.OnMouseMove(e);          
+            base.OnDropDownClosed(e);
         }
 
         protected override void OnDropDown(EventArgs e)
         {
-            base.OnDropDown(e);
+            _onDropDownAction(e);
         }
-
-        protected override void OnPaintBackground(PaintEventArgs pevent)
-        {
-
-
-            if (IS_BOOMER_MODE & DropDownStyle == ComboBoxStyle.DropDownList)
-            {
-                pevent.Graphics.Clear(Color.White);
-                base.OnPaint(pevent);
-            }
-            else
-            {
-                base.OnPaintBackground(pevent);
-            }
-
-        }
-
+      
 
         protected override void OnDrawItem(DrawItemEventArgs e)
         {
-            var Brush = Brushes.Black;
-            Brush backBrush;
-
-            var clientMouse = this.PointToClient(Cursor.Position);
-            var localMouse = clientMouse.Subtract(new(0, 0));
-
-            e.Graphics.DrawLine(new(GenRandomColor(),10), localMouse, Utils.Add(localMouse, new(10,0)));
-
-
-            if (e.Bounds.Contains(localMouse))
-            {
-                backBrush = new SolidBrush(Color.LightBlue);
-            }
-            else
-            {
-                backBrush = new SolidBrush(Color.White);
-            }
-           
-            int index = e.Index >= 0 ? e.Index : 0;
-            //e.Graphics.FillRectangle(backBrush, e.Bounds);
-            e.Graphics.DrawString(Items[index].ToString(), Font, Brush, e.Bounds, StringFormat.GenericDefault);
-            //e.Graphics.DrawRectangle(new(GenRandomColor(),3), e.Bounds.Deflate(new(0,0,3,3)));
+            _onDrawItemAction(e);
         }
 
+        protected virtual void OnDropDown_DropDownList(EventArgs e)
+        {
+            base.OnDropDown(e);
+            _openingDropdown = true;
+            _dropdownOpen = true;
+        }
+
+        protected virtual void OnDropDownClosed_DropDownList(EventArgs e)
+        {
+            base.OnDropDownClosed(e);
+            _dropdownOpen = false;
+        }
+
+        protected virtual void OnDrawItem_DropDownList(DrawItemEventArgs e)
+        {
+
+            var Brush = Brushes.Black;
+            Color _backColor;
+
+            string _text = e.Index != -1 ? Items[e.Index].ToString()! : this.Text;
+
+
+
+            
+            if (e.Index != _lastHighlighted.Index)
+            {
+                SuspendLayout();
+                //If we are opening the dropdown, we prevent the control from highlighting the last item
+                if (_openingDropdown & e.Index == Items.Count-1)
+                {
+                    _openingDropdown = false; 
+                    _backColor = Color.White;
+                }
+                else
+                {
+                    _backColor = Color.LightBlue;
+                }
+               
+                e.Graphics.FillRectangle(new SolidBrush(_backColor), e.Bounds);
+                e.Graphics.DrawString(_text, Font, Brush, e.Bounds, StringFormat.GenericDefault);
+
+                e.Graphics.FillRectangle(new SolidBrush(Color.White), _lastHighlighted.Bounds);
+                e.Graphics.DrawString(_lastHighlighted.Text, Font, Brush, _lastHighlighted.Bounds, StringFormat.GenericDefault);
+
+                _lastHighlighted = (e.Index, _text, e.Bounds);
+                ResumeLayout();
+            }
+            else if (e.Bounds != _lastHighlighted.Bounds)
+            {
+                e.Graphics.FillRectangle(new SolidBrush(Color.White), e.Bounds);
+                e.Graphics.DrawString(_text, Font, Brush, e.Bounds, StringFormat.GenericDefault);
+            }
+
+            //Console.WriteLine($"currentIndex: {e.Index} \t hasMouse: ");
+          
+            
+            
+
+        }
 
     }
 
