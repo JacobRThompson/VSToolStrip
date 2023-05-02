@@ -61,6 +61,16 @@ namespace Honeycomb.UI.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] Arrow_Icon {
+            get {
+                object obj = ResourceManager.GetObject("Arrow_Icon", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap CloseTab {
@@ -101,6 +111,16 @@ namespace Honeycomb.UI.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] Pinned_Icon {
+            get {
+                object obj = ResourceManager.GetObject("Pinned_Icon", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap PinnedHot {
@@ -131,6 +151,16 @@ namespace Honeycomb.UI.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] Unpinned_Icon {
+            get {
+                object obj = ResourceManager.GetObject("Unpinned_Icon", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap UnpinnedHot {
@@ -147,6 +177,16 @@ namespace Honeycomb.UI.Properties {
             get {
                 object obj = ResourceManager.GetObject("UnpinnedPushed", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] X_Icon {
+            get {
+                object obj = ResourceManager.GetObject("X_Icon", resourceCulture);
+                return ((byte[])(obj));
             }
         }
     }
