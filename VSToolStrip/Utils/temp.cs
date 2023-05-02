@@ -1,40 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.Drawing.Imaging;
 using System.Linq;
-using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Forms;
 
-namespace Tests
+namespace Honeycomb.UI
 {
-    public partial class Form2 : Form
+    public static class temp
     {
-        public Form2()
-        {
-            //Allows us to write to console while inside a form
-            Program.AllocConsole();
-            InitializeComponent();
-
-        }
-
-
-
-        public static Color GenerateRandomColor()
-        {
-            Random random = new Random();
-            int red = random.Next(0, 256);
-            int green = random.Next(0, 256);
-            int blue = random.Next(0, 256);
-            return Color.FromArgb(red, green, blue);
-        }
-
-        public static Bitmap ChangeColor(Image image, Color newColor)
+        public static Image ChangeColor(Image image, Color newColor)
         {
             Bitmap bitmap = new Bitmap(image.Width, image.Height);
             using (Graphics graphics = Graphics.FromImage(bitmap))
@@ -56,24 +32,23 @@ namespace Tests
                 for (int x = 0; x < bitmap.Width; x++)
                 {
                     int index = y * stride + x * bytesPerPixel;
-
-                    pixelValues[index] = newColor.B;
-                    pixelValues[index + 1] = newColor.G;
-                    pixelValues[index + 2] = newColor.R;
-
+                    byte alpha = pixelValues[index + 3];
+                    if (alpha != 0)
+                    {
+                        pixelValues[index] = newColor.B;
+                        pixelValues[index + 1] = newColor.G;
+                        pixelValues[index + 2] = newColor.R;
+                    }
                 }
             }
 
             Marshal.Copy(pixelValues, 0, ptr, pixelValues.Length);
             bitmap.UnlockBits(bitmapData);
 
-            return bitmap;
-        }
+            Image result = Image.FromHbitmap(bitmap.GetHbitmap());
+            bitmap.Dispose();
 
-
-        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            pictureBox2.BackgroundImage = ChangeColor(pictureBox2.BackgroundImage, GenerateRandomColor());
+            return result;
         }
     }
 }

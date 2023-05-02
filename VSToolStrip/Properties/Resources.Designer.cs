@@ -61,12 +61,12 @@ namespace Honeycomb.UI.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static byte[] Arrow_Icon {
+        internal static System.Drawing.Bitmap Arrow_Icon {
             get {
                 object obj = ResourceManager.GetObject("Arrow_Icon", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
@@ -111,12 +111,12 @@ namespace Honeycomb.UI.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static byte[] Pinned_Icon {
+        internal static System.Drawing.Bitmap Pinned_Icon {
             get {
                 object obj = ResourceManager.GetObject("Pinned_Icon", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
@@ -151,12 +151,12 @@ namespace Honeycomb.UI.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static byte[] Unpinned_Icon {
+        internal static System.Drawing.Bitmap Unpinned_Icon {
             get {
                 object obj = ResourceManager.GetObject("Unpinned_Icon", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
@@ -181,12 +181,12 @@ namespace Honeycomb.UI.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static byte[] X_Icon {
+        internal static System.Drawing.Bitmap X_Icon {
             get {
                 object obj = ResourceManager.GetObject("X_Icon", resourceCulture);
-                return ((byte[])(obj));
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
     }
