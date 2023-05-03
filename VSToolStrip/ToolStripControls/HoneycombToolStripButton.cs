@@ -27,6 +27,7 @@ namespace Honeycomb.UI.ToolStripControls
             _control.MouseUp += (sender, e) => OnMouseUp(e);
             _control.MouseEnter += (sender, e) => OnMouseEnter(e);
             _control.MouseLeave += (sender, e) => OnMouseLeave(e);
+
         }
 
         public event EventHandler? PinnedChanged;

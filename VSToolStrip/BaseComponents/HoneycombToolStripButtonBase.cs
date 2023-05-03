@@ -50,7 +50,7 @@ namespace Honeycomb.UI.BaseComponents
             CloseButton.MouseEnter += (object? sender, EventArgs e) => OnMouseEnter(e);
             CloseButton.MouseLeave += (object? sender, EventArgs e) => OnMouseLeave(e);
 
-            this.DoubleBuffered = true;
+            SetStyle(ControlStyles.UserPaint | ControlStyles.AllPaintingInWmPaint | ControlStyles.OptimizedDoubleBuffer, true);
         }
 
         private void Label_Click(object? sender, EventArgs e)
@@ -62,7 +62,7 @@ namespace Honeycomb.UI.BaseComponents
         public event EventHandler? CheckedChanged;
         public event EventHandler? HighlightedChanged;
 
-   
+
         [DefaultValue(true)]
         public bool ShowIcons
         {
@@ -126,6 +126,7 @@ namespace Honeycomb.UI.BaseComponents
                 if (_buttonState != value)
                 {
                     _buttonState = value;
+                    Console.WriteLine($"Button state changed to {_buttonState}");
                     Invalidate();
                 }
             }
@@ -146,6 +147,21 @@ namespace Honeycomb.UI.BaseComponents
             get => label.Text;
             set => label.Text = value;
         }
+
+
+        public override Color ForeColor
+        {
+            get => base.ForeColor;
+            set
+            {
+                base.ForeColor = value;
+                label.ForeColor = value;
+                PinToggle.IconColor = value;
+                CloseButton.IconColor = value;
+                Invalidate();
+            }
+        }
+
 
         public bool Pinned
         {
@@ -174,6 +190,8 @@ namespace Honeycomb.UI.BaseComponents
             set
             {
                 _highlighted = value;
+                PinToggle.Highlighted = value;
+                CloseButton.Highlighted = value;
                 OnHighlightedChanged(EventArgs.Empty);
             }
         }
@@ -239,6 +257,13 @@ namespace Honeycomb.UI.BaseComponents
         }
 
 
+        protected override void OnPaint(PaintEventArgs e)
+        {
+            base.OnPaint(e);
+        }
+
+        private Color _prevBackColor = Color.Empty;
+
         protected override void OnPaintBackground(PaintEventArgs e)
         {
             const float HOT_OPACITY = 0.33f;
@@ -251,9 +276,9 @@ namespace Honeycomb.UI.BaseComponents
                 case PushButtonState.Hot:
                     if (Highlighted)
                     {
-                        backgroundColor = Lerp(SystemColors.MenuHighlight, Parent.BackColor, HOT_OPACITY);
+                        backgroundColor = Colors.Lerp(SystemColors.MenuHighlight, Parent.BackColor, HOT_OPACITY);
                         outlineColor = this.Checked ?
-                            Lerp(Color.Black, ProfessionalColors.ButtonCheckedHighlightBorder, .25f) :
+                            Colors.Lerp(Color.Black, ProfessionalColors.ButtonCheckedHighlightBorder, .25f) :
                             backgroundColor;
                     }
                     else
@@ -268,7 +293,7 @@ namespace Honeycomb.UI.BaseComponents
                 case PushButtonState.Pressed:
                     if (Highlighted)
                     {
-                        backgroundColor = Lerp(SystemColors.MenuHighlight, Parent.BackColor, 1f - HOT_OPACITY);
+                        backgroundColor = Colors.Lerp(SystemColors.MenuHighlight, Parent.BackColor, 1f - HOT_OPACITY);
                         outlineColor = SystemColors.MenuHighlight;
                     }
                     else
@@ -285,7 +310,7 @@ namespace Honeycomb.UI.BaseComponents
                     {
                         backgroundColor = SystemColors.MenuHighlight;
                         outlineColor = this.Checked ?
-                            Lerp(Color.Black, ProfessionalColors.ButtonCheckedHighlightBorder, .25f) :
+                            Colors.Lerp(Color.Black, ProfessionalColors.ButtonCheckedHighlightBorder, .25f) :
                             SystemColors.InactiveBorder;
                     }
                     else
@@ -297,11 +322,12 @@ namespace Honeycomb.UI.BaseComponents
                     }
                     break;
             }
-
-            e.Graphics.Clear(backgroundColor);
+             e.Graphics.FillRectangle(new SolidBrush(backgroundColor), e.ClipRectangle);
+               
             e.Graphics.DrawRectangle(
                 new Pen(outlineColor),
                 new(Point.Empty, this.Size - new Size(1, 1)));
+
         }
 
     }

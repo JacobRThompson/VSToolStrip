@@ -12,10 +12,9 @@ namespace Honeycomb.UI.BaseComponents
 
         private bool _highlighted = false;
 
-
         public event EventHandler? HighlightedChanged;
 
-        public bool Highlighted
+        public virtual bool Highlighted
         {
             get => _highlighted;
             set
@@ -37,6 +36,7 @@ namespace Honeycomb.UI.BaseComponents
             get => Highlighted ? SystemColors.HighlightText : base.ForeColor;
             set => base.ForeColor = value;
         }
+
 
     }
 }

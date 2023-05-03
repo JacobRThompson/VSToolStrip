@@ -23,8 +23,6 @@ namespace Tests
 
         }
 
-
-
         public static Color GenerateRandomColor()
         {
             Random random = new Random();
@@ -43,14 +41,21 @@ namespace Tests
             }
 
             Rectangle rect = new Rectangle(0, 0, bitmap.Width, bitmap.Height);
+
+            // Lock the bits of the new Bitmap for reading and writing
             BitmapData bitmapData = bitmap.LockBits(rect, ImageLockMode.ReadWrite, bitmap.PixelFormat);
+
+            // Get a pointer to the first byte of the bitmap data
             IntPtr ptr = bitmapData.Scan0;
+
+            // Calculate the number of bytes per pixel and the stride of the bitmap data
             int bytesPerPixel = Bitmap.GetPixelFormatSize(bitmap.PixelFormat) / 8;
             int stride = bitmapData.Stride;
 
             byte[] pixelValues = new byte[Math.Abs(stride) * bitmap.Height];
-            Marshal.Copy(ptr, pixelValues, 0, pixelValues.Length);
 
+            // Copy the bitmap data to the byte array
+            Marshal.Copy(ptr, pixelValues, 0, pixelValues.Length);
             for (int y = 0; y < bitmap.Height; y++)
             {
                 for (int x = 0; x < bitmap.Width; x++)
@@ -64,7 +69,10 @@ namespace Tests
                 }
             }
 
+            // Copy the modified pixel values back to the bitmap data
             Marshal.Copy(pixelValues, 0, ptr, pixelValues.Length);
+
+            // Unlock the bits of the bitmap data
             bitmap.UnlockBits(bitmapData);
 
             return bitmap;

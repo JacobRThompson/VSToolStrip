@@ -5,9 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Honeycomb.UI
+namespace Honeycomb.UI.Utils
 {
-    public static partial class Utils
+    public static class ControlExtensions
     {
         public static void SwapIndices(this Control.ControlCollection controls, int index1, int index2)
         {

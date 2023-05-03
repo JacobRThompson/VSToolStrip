@@ -10,41 +10,50 @@ namespace Honeycomb.UI.IconButtons
 {
     public class IconPushButton: IconControl
     {       
-       
+        private Color _prevBackColor = Color.Empty;
+        private Color _prevForeColor = Color.Empty;
 
-        [Category(IMAGE_CATEGORY)]
-        public Image DefaultImage { get; set; } = new Bitmap(1, 1);
-
-        [Category(IMAGE_CATEGORY)]
-        public Image HotImage { get; set; } = new Bitmap(1, 1);
-
-        [Category(IMAGE_CATEGORY)]
-        public Image PressedImage { get; set; } = new Bitmap(1, 1);
-
-        [Category(IMAGE_CATEGORY)]
-        public Image DisabledImage { get; set; } = new Bitmap(1, 1);
-
-
-        public override Image BackgroundImage 
+        protected override void OnPaint(PaintEventArgs e)
         {
-            get => ButtonState switch
+            Color foreColor, backColor;
+
+            switch (ButtonState)
             {
-                PushButtonState.Hot => HotImage,
-                PushButtonState.Pressed => PressedImage,
-                PushButtonState.Disabled => DisabledImage,
-                _ => base.BackgroundImage
-            }; 
-            set => base.BackgroundImage = value; 
+                case PushButtonState.Hot: //Swap back and fore colors when user hovers over button
+                    foreColor = this.GetBackColor();
+                    backColor = this.GetForeColor();
+                    break;
+
+                case PushButtonState.Pressed:
+                    foreColor = this.GetForeColor();
+                    backColor = this.GetBackColor();
+                    break;
+
+                case PushButtonState.Disabled:
+                    foreColor = SystemColors.GrayText;
+                    backColor = this.GetForeColor();
+                    break;
+
+                default:
+                    foreColor = this.GetForeColor();
+                    backColor = this.GetBackColor();
+                    break;
+            }
+
+            e.Graphics.FillRectangle(new SolidBrush(backColor), e.ClipRectangle);
+
+            if (BackgroundImage != null)
+            {
+                e.Graphics.DrawImage(
+                    BackgroundImage!.ReplaceOpaquePixels(foreColor), 
+                    e.ClipRectangle.ScaleToAspectRatio(BackgroundImage!.GetAspectRatio())
+                );
+                _prevForeColor = foreColor;
+            }
+            
         }
 
 
-        protected override void OnHandleCreated(EventArgs e)
-        {
-            base.OnHandleCreated(e);
-            base.BackgroundImage = DefaultImage;
-        }
-
-        
     }
 
     

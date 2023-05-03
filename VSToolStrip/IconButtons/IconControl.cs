@@ -15,9 +15,19 @@ namespace Honeycomb.UI.IconButtons
         private PushButtonState _buttonState = PushButtonState.Normal;
         private bool _highlighted = false;
 
+        public IconControl()
+        {
+            SetStyle(ControlStyles.UserPaint | ControlStyles.AllPaintingInWmPaint | ControlStyles.SupportsTransparentBackColor | ControlStyles.OptimizedDoubleBuffer, true);  
+        }
+
 
         public event EventHandler? HighlightedChanged;
+        public event EventHandler? PushButtonStateChanged;
 
+        [Category("Appearance"), Browsable(true)]
+        public Color IconColor { get; set; } = SystemColors.ControlText;
+
+        [Category("Appearance")]
         public bool Highlighted
         {
             get => _highlighted;
@@ -37,8 +47,22 @@ namespace Honeycomb.UI.IconButtons
                 {
                     _buttonState = value;
                     Invalidate();
+                   
                 }
             }
+        }
+
+        Color IHighlightable.ForeColor
+        {
+            get => IconColor;
+            set => IconColor = value;
+        }
+
+
+        protected virtual void OnPushButtonStateChanged(EventArgs e)
+        {
+            Invalidate();
+            PushButtonStateChanged?.Invoke(this, e);
         }
 
         protected virtual void OnHighlightChanged(EventArgs e)

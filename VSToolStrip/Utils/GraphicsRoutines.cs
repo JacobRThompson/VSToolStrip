@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms.VisualStyles;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.TextBox;
 
-namespace Honeycomb.UI
+namespace Honeycomb.UI.Utils
 {
     public static class GraphicsRoutines
         {
@@ -22,9 +22,9 @@ namespace Honeycomb.UI
                     case PushButtonState.Hot:
                         if (isHighlighted)
                         {
-                            backgroundColor = Lerp(SystemColors.MenuHighlight, parentBackColor, HOT_OPACITY);
+                            backgroundColor = Colors.Lerp(SystemColors.MenuHighlight, parentBackColor, HOT_OPACITY);
                             outlineColor = isChecked ?
-                                Lerp(Color.Black, ProfessionalColors.ButtonCheckedHighlightBorder, .25f) :
+                                Colors.Lerp(Color.Black, ProfessionalColors.ButtonCheckedHighlightBorder, .25f) :
                                 backgroundColor;
                         }
                         else
@@ -39,7 +39,7 @@ namespace Honeycomb.UI
                     case PushButtonState.Pressed:
                         if (isHighlighted)
                         {
-                            backgroundColor = Lerp(SystemColors.MenuHighlight, parentBackColor, 1f - HOT_OPACITY);
+                            backgroundColor = Colors.Lerp(SystemColors.MenuHighlight, parentBackColor, 1f - HOT_OPACITY);
                             outlineColor = SystemColors.MenuHighlight;
                         }
                         else
@@ -56,7 +56,7 @@ namespace Honeycomb.UI
                         {
                             backgroundColor = SystemColors.MenuHighlight;
                             outlineColor = isChecked ?
-                                Lerp(Color.Black, ProfessionalColors.ButtonCheckedHighlightBorder, .25f) :
+                                Colors.Lerp(Color.Black, ProfessionalColors.ButtonCheckedHighlightBorder, .25f) :
                                 outlineByDefault? SystemColors.InactiveBorder: Color.Transparent;
                         }
                         else

@@ -57,6 +57,7 @@
             flowLayoutPanel1.Controls.Add(label);
             flowLayoutPanel1.Controls.Add(PinToggle);
             flowLayoutPanel1.Controls.Add(CloseButton);
+            flowLayoutPanel1.Dock = DockStyle.Fill;
             flowLayoutPanel1.Location = new Point(0, 0);
             flowLayoutPanel1.Margin = new Padding(0);
             flowLayoutPanel1.Name = "flowLayoutPanel1";
@@ -65,43 +66,37 @@
             // 
             // PinToggle
             // 
-            PinToggle.BackgroundImage = Properties.Resources.Unpinned;
-            PinToggle.BackgroundImageLayout = ImageLayout.Stretch;
+            PinToggle.BackColor = Color.Transparent;
+            PinToggle.BackgroundImage = Properties.Resources.Unpinned_Icon;
+            PinToggle.BackgroundImageLayout = ImageLayout.Zoom;
             PinToggle.Checked = false;
-            PinToggle.DefaultCheckedImage = Properties.Resources.Pinned;
-            PinToggle.DefaultUncheckedImage = Properties.Resources.Unpinned;
-            PinToggle.DisabledCheckedImage = null;
-            PinToggle.DisabledUncheckedImage = null;
+            PinToggle.CheckedImage = Properties.Resources.Pinned_Icon;
             PinToggle.Highlighted = false;
-            PinToggle.HotCheckedImage = Properties.Resources.PinnedHot;
-            PinToggle.HotUncheckedImage = Properties.Resources.UnpinnedHot;
+            PinToggle.IconColor = SystemColors.ControlText;
             PinToggle.Location = new Point(63, 7);
             PinToggle.Margin = new Padding(0, 7, 1, 7);
             PinToggle.Name = "PinToggle";
-            PinToggle.PressedCheckedImage = Properties.Resources.PinnedPushed;
-            PinToggle.PressedUncheckedImage = Properties.Resources.UnpinnedPushed;
             PinToggle.Size = new Size(19, 22);
             PinToggle.TabIndex = 3;
             PinToggle.TabStop = false;
+            PinToggle.UncheckedImage = Properties.Resources.Unpinned_Icon;
             // 
             // CloseButton
             // 
-            CloseButton.BackgroundImage = Properties.Resources.CloseTab;
+            CloseButton.BackColor = Color.Transparent;
+            CloseButton.BackgroundImage = Properties.Resources.X_Icon;
             CloseButton.BackgroundImageLayout = ImageLayout.Stretch;
-            CloseButton.DefaultImage = Properties.Resources.CloseTab;
-            CloseButton.DisabledImage = null;
             CloseButton.Highlighted = false;
-            CloseButton.HotImage = Properties.Resources.CloseTabHot;
+            CloseButton.IconColor = SystemColors.ControlText;
             CloseButton.Location = new Point(84, 7);
             CloseButton.Margin = new Padding(1, 7, 4, 7);
             CloseButton.Name = "CloseButton";
-            CloseButton.PressedImage = Properties.Resources.CloseTabPushed;
             CloseButton.Size = new Size(19, 22);
             CloseButton.TabIndex = 4;
             CloseButton.TabStop = false;
             CloseButton.Click += CloseButton_Click;
             // 
-            // VSToolStripBase
+            // HoneycombToolStripButtonBase
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
@@ -110,7 +105,7 @@
             BackColor = SystemColors.Control;
             Controls.Add(flowLayoutPanel1);
             Margin = new Padding(4, 5, 4, 5);
-            Name = "VSToolStripBase";
+            Name = "HoneycombToolStripButtonBase";
             Size = new Size(107, 36);
             flowLayoutPanel1.ResumeLayout(false);
             flowLayoutPanel1.PerformLayout();
@@ -124,7 +119,7 @@
 
         public HighlightLabel label;
         private FlowLayoutPanel flowLayoutPanel1;
-        public IconButtons.IconToggleButton PinToggle;
         public IconButtons.IconPushButton CloseButton;
+        public IconButtons.IconToggleButton PinToggle;
     }
 }

@@ -5,9 +5,9 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Honeycomb.UI
+namespace Honeycomb.UI.Utils
 {
-    public static partial class Utils
+    public static class Win32Extensions
     {
         // Constants used by the Win32 API functions
         private const int CB_GETCOMBOBOXINFO = 0x164;  // Get information about the combobox control

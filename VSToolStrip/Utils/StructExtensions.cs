@@ -1,25 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.Drawing.Imaging;
 using System.Linq;
+using System.Reflection.Metadata;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Honeycomb.UI
+namespace Honeycomb.UI.Utils
 {
-    public static partial class Utils 
+    public static class StructExtensions 
     {
         public static Point Subtract(this Point p1, Point p2) => new(p1.X - p2.X, p1.Y - p2.Y);
         public static Point  Add(this Point p1, Point p2) => new(p1.X + p2.X, p1.Y + p2.Y);
-
-        private static Random rng = new();
-
-        public static Color Lerp(Color a, Color b, float amount)
-        {
-            return Color.FromArgb(
-                (int)(a.R + (b.R - a.R) * amount),
-                (int)(a.G + (b.G - a.G) * amount),
-                (int)(a.B + (b.B - a.B) * amount));
-        }
 
         public static Rectangle Deflate(this Rectangle rect, Padding padding)
         {
@@ -30,9 +24,72 @@ namespace Honeycomb.UI
             return rect;
         }
 
-        public static Color ToOpaque(this Color c) => Color.FromArgb(255, c.R, c.G, c.B);
+        public static float GetAspectRatio(this Image image) =>  image.Width / image.Height;
+ 
+        public static Rectangle ScaleToAspectRatio(this Rectangle rect, float aspectRatio)
+        {
+            var currentAspectRatio = (float)rect.Width / rect.Height;
+            if (currentAspectRatio > aspectRatio)
+            {
+                // Scale the width to match the new aspect ratio
+                var newWidth = (int)(rect.Height * aspectRatio);
+                var x = rect.X + (rect.Width - newWidth) / 2;
+                return new Rectangle(x, rect.Y, newWidth, rect.Height);
+            }
+            else
+            {
+                // Scale the height to match the new aspect ratio
+                var newHeight = (int)(rect.Width / aspectRatio);
+                var y = rect.Y + (rect.Height - newHeight) / 2;
+                return new Rectangle(rect.X, y, rect.Width, newHeight);
+            }
+        }
+    
+        public static Bitmap ReplaceOpaquePixels(this Image image, Color newColor)
+        {
+            Bitmap bitmap = new Bitmap(image.Width, image.Height);
+            using (Graphics graphics = Graphics.FromImage(bitmap))
+            {
+                graphics.DrawImage(image, 0, 0, image.Width, image.Height);
+            }
 
-        public static Color GenRandomColor() => Color.FromArgb(rng.Next(256), rng.Next(256), rng.Next(256));
+            Rectangle rect = new Rectangle(0, 0, bitmap.Width, bitmap.Height);
+
+            // Lock the bits of the new Bitmap for reading and writing
+            BitmapData bitmapData = bitmap.LockBits(rect, ImageLockMode.ReadWrite, bitmap.PixelFormat);
+
+            // Get a pointer to the first byte of the bitmap data
+            IntPtr ptr = bitmapData.Scan0;
+
+            // Calculate the number of bytes per pixel and the stride of the bitmap data
+            int bytesPerPixel = Bitmap.GetPixelFormatSize(bitmap.PixelFormat) / 8;
+            int stride = bitmapData.Stride;
+
+            byte[] pixelValues = new byte[Math.Abs(stride) * bitmap.Height];
+
+            // Copy the bitmap data to the byte array
+            Marshal.Copy(ptr, pixelValues, 0, pixelValues.Length);
+            for (int y = 0; y < bitmap.Height; y++)
+            {
+                for (int x = 0; x < bitmap.Width; x++)
+                {
+                    int index = y * stride + x * bytesPerPixel;
+
+                    pixelValues[index] = newColor.B;
+                    pixelValues[index + 1] = newColor.G;
+                    pixelValues[index + 2] = newColor.R;
+
+                }
+            }
+
+            // Copy the modified pixel values back to the bitmap data
+            Marshal.Copy(pixelValues, 0, ptr, pixelValues.Length);
+
+            // Unlock the bits of the bitmap data
+            bitmap.UnlockBits(bitmapData);
+
+            return bitmap;
+        }
     }
 
 }
