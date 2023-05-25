@@ -26,6 +26,8 @@ namespace Honeycomb.UI.Utils
 
         public static float GetAspectRatio(this Image image) =>  image.Width / image.Height;
  
+        public static Point GetCenter(this Rectangle rect) => new(rect.X + rect.Width/2, rect.Y + rect.Height/2);
+
         public static Rectangle ScaleToAspectRatio(this Rectangle rect, float aspectRatio)
         {
             var currentAspectRatio = (float)rect.Width / rect.Height;
@@ -89,6 +91,38 @@ namespace Honeycomb.UI.Utils
             bitmap.UnlockBits(bitmapData);
 
             return bitmap;
+        }
+
+        public static unsafe void UnsafeReplaceOpaquePixels(Bitmap bitmap, Color newColor)
+        {
+            Rectangle rect = new Rectangle(0, 0, bitmap.Width, bitmap.Height);
+
+            // Lock the bits of the Bitmap for reading and writing
+            BitmapData bitmapData = bitmap.LockBits(rect, ImageLockMode.ReadWrite, bitmap.PixelFormat);
+
+            // Get a pointer to the first byte of the Bitmap data
+            byte* ptr = (byte*)bitmapData.Scan0.ToPointer();
+
+            // Calculate the number of bytes per pixel and the stride of the Bitmap data
+            int bytesPerPixel = Bitmap.GetPixelFormatSize(bitmap.PixelFormat) / 8;
+            int stride = bitmapData.Stride;
+
+            for (int y = 0; y < bitmap.Height; y++)
+            {
+                byte* row = ptr + y * stride;
+
+                for (int x = 0; x < bitmap.Width; x++)
+                {
+                    byte* pixel = row + x * bytesPerPixel;
+
+                    pixel[0] = newColor.B;
+                    pixel[1] = newColor.G;
+                    pixel[2] = newColor.R;
+                }
+            }
+
+            // Unlock the bits of the Bitmap data
+            bitmap.UnlockBits(bitmapData);
         }
     }
 

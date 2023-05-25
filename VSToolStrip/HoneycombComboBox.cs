@@ -11,16 +11,12 @@ using System.Xml.Serialization;
 namespace Honeycomb.UI
 {
 
-    public class HoneycombComboBox : MessageComboBox
+    public class HoneycombComboBox : MsgOnDisabledComboBox
     {
-
-        //This is only used for ComboBoxes with DropDownStyle = DropDown
-        private readonly Dictionary<int, bool> AllowHighlights = new();
 
         //This is only used for ComboBoxes with DropDownStyle = DropDownList
         private (int Index, string Text, Rectangle Bounds) _lastHighlighted = (-1, string.Empty, Rectangle.Empty);
-        private bool _openingDropdown;
-        private bool _dropdownOpen;
+
 
         private Action<EventArgs> _onDropDownClosedAction = delegate { };
         private Action<EventArgs> _onDropDownAction = delegate { };
@@ -28,9 +24,13 @@ namespace Honeycomb.UI
 
         public HoneycombComboBox()
         {
-            
+
             OnDropDownStyleChanged(EventArgs.Empty); //Initialize event handlers
         }
+
+        public event EventHandler<IsEmptyChangedEventArgs>? IsEmptyChanged;
+
+        public bool DropDownOpened { get; set; } = false;
 
         protected override void OnDropDownStyleChanged(EventArgs e)
         {
@@ -48,21 +48,29 @@ namespace Honeycomb.UI
                 default:
                     DrawMode = default;
                     _onDropDownAction = base.OnDropDown;
-                    _onDrawItemAction = base.OnDrawItem; 
+                    _onDrawItemAction = base.OnDrawItem;
                     _onDropDownClosedAction = base.OnDropDownClosed;
                     break;
             }
 
+            AdjustControlSize();
         }
 
 
+        protected virtual void OnIsEmptyChanged(IsEmptyChangedEventArgs e)
+        { 
+                IsEmptyChanged?.Invoke(this, e); 
+        }
+
         protected override void OnDropDownClosed(EventArgs e)
         {
-            base.OnDropDownClosed(e);
+            DropDownOpened = false;
+            base.OnDropDownClosed(e);        
         }
 
         protected override void OnDropDown(EventArgs e)
         {
+            DropDownOpened = true;
             _onDropDownAction(e);
         }
       
@@ -75,15 +83,17 @@ namespace Honeycomb.UI
         protected virtual void OnDropDown_DropDownList(EventArgs e)
         {
             base.OnDropDown(e);
-            _openingDropdown = true;
-            _dropdownOpen = true;
+            
         }
 
         protected virtual void OnDropDownClosed_DropDownList(EventArgs e)
         {
             base.OnDropDownClosed(e);
-            _dropdownOpen = false;
+
         }
+
+        readonly Color HOT_COLOR = Color.LightBlue;
+        readonly Color BACK_COLOR = Color.White;
 
         protected virtual void OnDrawItem_DropDownList(DrawItemEventArgs e)
         {
@@ -93,27 +103,32 @@ namespace Honeycomb.UI
 
             string _text = e.Index != -1 ? Items[e.Index].ToString()! : this.Text;
 
+            if ((e.State & DrawItemState.ComboBoxEdit) == DrawItemState.ComboBoxEdit)
+            {     
+                _backColor = this.HasMouse()? HOT_COLOR : BACK_COLOR;
 
-
-            
-            if (e.Index != _lastHighlighted.Index)
+                e.Graphics.FillRectangle(new SolidBrush(_backColor), e.Bounds);
+                e.Graphics.DrawString(_text, Font, Brush, e.Bounds, StringFormat.GenericDefault);
+                //ControlPaint.DrawFocusRectangle(e.Graphics, e.Bounds);
+            }
+            else if (e.Index != _lastHighlighted.Index)
             {
                 SuspendLayout();
                 //If we are opening the dropdown, we prevent the control from highlighting the last item
-                if (_openingDropdown & e.Index == Items.Count-1)
+                if (DropDownOpened & e.Index == Items.Count-1)
                 {
-                    _openingDropdown = false; 
-                    _backColor = Color.White;
+                    DropDownOpened = false; 
+                    _backColor = BACK_COLOR;
                 }
                 else
                 {
-                    _backColor = Color.LightBlue;
+                    _backColor = HOT_COLOR;
                 }
                
                 e.Graphics.FillRectangle(new SolidBrush(_backColor), e.Bounds);
                 e.Graphics.DrawString(_text, Font, Brush, e.Bounds, StringFormat.GenericDefault);
 
-                e.Graphics.FillRectangle(new SolidBrush(Color.White), _lastHighlighted.Bounds);
+                e.Graphics.FillRectangle(new SolidBrush(BACK_COLOR), _lastHighlighted.Bounds);
                 e.Graphics.DrawString(_lastHighlighted.Text, Font, Brush, _lastHighlighted.Bounds, StringFormat.GenericDefault);
 
                 _lastHighlighted = (e.Index, _text, e.Bounds);
@@ -121,17 +136,20 @@ namespace Honeycomb.UI
             }
             else if (e.Bounds != _lastHighlighted.Bounds)
             {
-                e.Graphics.FillRectangle(new SolidBrush(Color.White), e.Bounds);
+                e.Graphics.FillRectangle(new SolidBrush(BACK_COLOR), e.Bounds);
                 e.Graphics.DrawString(_text, Font, Brush, e.Bounds, StringFormat.GenericDefault);
             }
 
-            //Console.WriteLine($"currentIndex: {e.Index} \t hasMouse: ");
-          
-            
-            
-
+            //Console.WriteLine($"currentIndex: {e.Index} \t pos: {e.Bounds.GetCenter()} ");
         }
 
+        private void AdjustControlSize()
+        {
+            // Calculate the height of the control based on the font size and the padding
+            ItemHeight = (int)this.Font.GetHeight() + this.Padding.Top + this.Padding.Bottom + 2;
+
+           
+        }
     }
 
 }

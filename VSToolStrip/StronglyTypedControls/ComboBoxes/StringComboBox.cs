@@ -19,14 +19,26 @@ namespace Honeycomb.UI.StronglyTypedControls.ComboBoxes
         public virtual List<string> Values
         {
             get => this.Enabled ? _values : new();
-            set
+            set  
             {
-                _values = value;
+                var prevSelectedItem = SelectedItem;
+
                 Items.Clear();
                 Items.AddRange(
-                     Values
+                     value
                     .Select(GenText)
                     .ToArray());
+
+                if (Items.Contains(prevSelectedItem))
+                {
+                    SelectedItem = prevSelectedItem;
+                }
+
+                _values = value;
+
+#if !DEBUG 
+                OnIsEmptyChanged(new(_values.Count == 0));
+#endif
             }
         }
 
@@ -53,6 +65,7 @@ namespace Honeycomb.UI.StronglyTypedControls.ComboBoxes
             }
         }
 
+        [Category(Globals.TYPED_CONTROL_ROOT_CATEGORY), DefaultValue(true)]  public bool DisableOnEmpty { get; set; } = true;
         [Category(Globals.TYPED_CONTROL_ROOT_CATEGORY), DefaultValue(false)]  public bool RequiredLocally { get; set; }
         [Category(Globals.TYPED_CONTROL_ROOT_CATEGORY), DefaultValue(false)]  public bool RequiredGlobally { get; set; } = false;
         [Category(Globals.TYPED_CONTROL_ROOT_CATEGORY), DefaultValue("")] public string Suffix { get; set; } = String.Empty;
@@ -124,7 +137,7 @@ namespace Honeycomb.UI.StronglyTypedControls.ComboBoxes
         protected override void OnSelectedIndexChanged(EventArgs e)
         {
             //We check if the user was the one who caused the index to change by checking mouse position. Raise validation if it was.
-            if (this.HasMouse()) { OnValidating(new()); }
+            if (this.HasMouse() | this.DropDownOpened) { OnValidating(new()); }
             base.OnSelectedIndexChanged(e);
         }
 

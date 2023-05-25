@@ -9,9 +9,23 @@ using System.Windows.Forms.VisualStyles;
 namespace Honeycomb.UI.IconButtons
 {
     public class IconPushButton: IconControl
-    {       
-        private Color _prevBackColor = Color.Empty;
-        private Color _prevForeColor = Color.Empty;
+    {          
+      
+
+
+        protected virtual Bitmap BackgroundBitmap { get; set; } = new(1, 1);
+
+        protected override void OnBackgroundImageChanged(EventArgs e)
+        {
+            base.OnBackgroundImageChanged(e);
+            BackgroundBitmap = new(BackgroundImage, this.Size);
+        }
+
+        protected override void OnSizeChanged(EventArgs e)
+        {
+            base.OnSizeChanged(e);
+            BackgroundBitmap = new(BackgroundImage, this.Size);
+        }
 
         protected override void OnPaint(PaintEventArgs e)
         {
@@ -44,11 +58,13 @@ namespace Honeycomb.UI.IconButtons
 
             if (BackgroundImage != null)
             {
+                StructExtensions.UnsafeReplaceOpaquePixels(BackgroundBitmap, foreColor);
+
                 e.Graphics.DrawImage(
-                    BackgroundImage!.ReplaceOpaquePixels(foreColor), 
-                    e.ClipRectangle.ScaleToAspectRatio(BackgroundImage!.GetAspectRatio())
-                );
-                _prevForeColor = foreColor;
+                         BackgroundBitmap!.ReplaceOpaquePixels(foreColor),
+                         e.ClipRectangle.ScaleToAspectRatio(BackgroundImage!.GetAspectRatio())
+                     );
+
             }
             
         }

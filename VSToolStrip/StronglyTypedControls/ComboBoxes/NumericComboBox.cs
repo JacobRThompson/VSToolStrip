@@ -44,12 +44,25 @@ namespace Honeycomb.UI.StronglyTypedControls.ComboBoxes
             get => this.Enabled ? _values : new();
             set
             {
-                _values = value;
+                var prevSelectedItem = SelectedItem;
+               
+
                 Items.Clear();
                 Items.AddRange(
-                     Values
+                     value
                     .Select(GenText)
                     .ToArray());
+
+              
+                if (Items.Contains(prevSelectedItem))
+                {
+                    SelectedItem = prevSelectedItem;
+                }
+
+                _values = value;
+#if !DEBUG
+                OnIsEmptyChanged(new(_values.Count == 0));
+#endif
             }
         }
 
@@ -129,7 +142,7 @@ namespace Honeycomb.UI.StronglyTypedControls.ComboBoxes
         protected override void OnSelectedIndexChanged(EventArgs e)
         {
             //We check if the user was the one who caused the index to change by checking mouse position. Raise validation if it was.
-            if (HasMouse) { OnValidating(new()); }
+            if (HasMouse | this.DropDownOpened) { OnValidating(new()); }
             base.OnSelectedIndexChanged(e);
         }
 

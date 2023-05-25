@@ -78,10 +78,9 @@ namespace Tests
             return bitmap;
         }
 
-
-        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        private void customComboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            pictureBox2.BackgroundImage = ChangeColor(pictureBox2.BackgroundImage, GenerateRandomColor());
+
         }
     }
 }

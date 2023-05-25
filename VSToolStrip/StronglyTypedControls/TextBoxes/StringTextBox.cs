@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace Honeycomb.UI.StronglyTypedControls.TextBoxes
 {
     [ToolboxItem(Globals.SHOW_BASE_COMPONENTS_IN_TOOLBOX)]
-    public class StringTextBox: BaseComponents.MessageTextBox
+    public class StringTextBox: BaseComponents.MsgOnDisabledTextBox
     {
         private string _value = string.Empty;
 

@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace Honeycomb.UI.BaseComponents
 {
     [ToolboxItem(Globals.SHOW_BASE_COMPONENTS_IN_TOOLBOX)]
-    public class MessageTextBox: ValidateOnEnterTextBox
+    public class MsgOnDisabledTextBox: ValidateOnEnterTextBox
     {
 
         private string _text = string.Empty;

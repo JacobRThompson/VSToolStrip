@@ -14,7 +14,10 @@ namespace Honeycomb.UI.IconButtons
 
         public event EventHandler? CheckedChanged;
 
-        [Category("Appearance")] public Image CheckedImage { get; set; } = new Bitmap(1, 1);
+        private Bitmap _checkedBitmap = new(1, 1);
+        private Bitmap _uncheckedBitmap = new(1, 1);
+
+        [Category("Appearance")] public Image CheckedImage {get; set;} = new Bitmap(1,1);
         [Category("Appearance")] public Image UncheckedImage { get; set; } = new Bitmap(1, 1);
 
         [Category("Appearance")] public bool Checked
@@ -27,14 +30,10 @@ namespace Honeycomb.UI.IconButtons
             }
         }
 
-        public override Image BackgroundImage 
-        {
-            get => Checked? CheckedImage : UncheckedImage;
-            set => base.BackgroundImage = value; 
-        }
-
         protected virtual void OnCheckedChanged(EventArgs e)
         {
+            BackgroundImage = Checked ? CheckedImage : UncheckedImage;
+
             CheckedChanged?.Invoke(this, e);
             Invalidate();
         }

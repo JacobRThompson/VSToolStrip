@@ -44,14 +44,11 @@ namespace Honeycomb.UI.StronglyTypedControls.TextBoxes
                 newValue = FAILED_VALIDATION;
             }
 
-            if (this.Value != FAILED_VALIDATION)
-            {
-                this.Value = newValue;
-            }
-            else
+            if (newValue == FAILED_VALIDATION)
             {
                 e.Cancel = true;
             }
+            this.Value = newValue;
 
             base.OnValidating(e);
         }

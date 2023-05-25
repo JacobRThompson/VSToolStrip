@@ -32,4 +32,11 @@
     </EmbeddedResource>
   </ItemGroup>
 
+	<ItemGroup>
+		<Using Include="Honeycomb.UI.BaseComponents" />
+		<Using Include="Honeycomb.UI.Utils" />
+		<Using Include="Honeycomb.UI.Utils.ControlExtensions">
+			<Static>True</Static>
+		</Using>
+	</ItemGroup>
 </Project>

@@ -122,11 +122,10 @@ namespace Honeycomb.UI.BaseComponents
         {
             get => _buttonState;
             set
-            {
+            {            
                 if (_buttonState != value)
                 {
                     _buttonState = value;
-                    Console.WriteLine($"Button state changed to {_buttonState}");
                     Invalidate();
                 }
             }
@@ -154,11 +153,14 @@ namespace Honeycomb.UI.BaseComponents
             get => base.ForeColor;
             set
             {
+                SuspendLayout();
                 base.ForeColor = value;
                 label.ForeColor = value;
                 PinToggle.IconColor = value;
                 CloseButton.IconColor = value;
+
                 Invalidate();
+                ResumeLayout();
             }
         }
 
@@ -189,10 +191,13 @@ namespace Honeycomb.UI.BaseComponents
             get => _highlighted;
             set
             {
+                SuspendLayout();
                 _highlighted = value;
                 PinToggle.Highlighted = value;
                 CloseButton.Highlighted = value;
+
                 OnHighlightedChanged(EventArgs.Empty);
+                ResumeLayout();
             }
         }
 
@@ -322,8 +327,8 @@ namespace Honeycomb.UI.BaseComponents
                     }
                     break;
             }
-             e.Graphics.FillRectangle(new SolidBrush(backgroundColor), e.ClipRectangle);
-               
+            e.Graphics.FillRectangle(new SolidBrush(backgroundColor), e.ClipRectangle);
+
             e.Graphics.DrawRectangle(
                 new Pen(outlineColor),
                 new(Point.Empty, this.Size - new Size(1, 1)));

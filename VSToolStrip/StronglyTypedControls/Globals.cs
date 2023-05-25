@@ -16,7 +16,7 @@ namespace Honeycomb.UI
         public static Action<Control, String> SetErrorRequiredLocally { get; set; } = delegate { };
         public static Action<Control, String> SetErrorRequiredGlobally { get; set; } = delegate { };
 
-        public static string RequiredLocallyMsg { get; set; } = "(DEBUG) This is required locally";
-        public static string RequiredGloballyMsg { get; set; } = string.Empty;
+        public static string RequiredLocallyMsg { get; set; } = "This field is required for this section";
+        public static string RequiredGloballyMsg { get; set; } = "This field is required to generate a final rate";
     }
 }

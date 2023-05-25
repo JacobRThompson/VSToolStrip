@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace Honeycomb.UI.BaseComponents
 {
     [ToolboxItem(Globals.SHOW_BASE_COMPONENTS_IN_TOOLBOX)]
-    public class MessageComboBox: ValidateOnEnterComboBox
+    public class MsgOnDisabledComboBox: ValidateOnEnterComboBox
     {
         private string _text = string.Empty;
         public string DisabledMsg { get; set; } = string.Empty;
@@ -52,5 +52,6 @@ namespace Honeycomb.UI.BaseComponents
 
             base.OnTextChanged(e);
         }
+
     }
 }

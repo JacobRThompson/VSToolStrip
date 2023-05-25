@@ -15,6 +15,7 @@ namespace Honeycomb.UI.IconButtons
         private PushButtonState _buttonState = PushButtonState.Normal;
         private bool _highlighted = false;
 
+
         public IconControl()
         {
             SetStyle(ControlStyles.UserPaint | ControlStyles.AllPaintingInWmPaint | ControlStyles.SupportsTransparentBackColor | ControlStyles.OptimizedDoubleBuffer, true);  
@@ -58,7 +59,6 @@ namespace Honeycomb.UI.IconButtons
             set => IconColor = value;
         }
 
-
         protected virtual void OnPushButtonStateChanged(EventArgs e)
         {
             Invalidate();
@@ -94,6 +94,8 @@ namespace Honeycomb.UI.IconButtons
             ButtonState = PushButtonState.Normal;
             base.OnMouseLeave(e);
         }
+
+        
     }
 }
 

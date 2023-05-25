@@ -21,9 +21,7 @@ namespace Honeycomb.UI
         }
 
         protected override void OnDrawItem(DrawItemEventArgs e)
-        {
-            Console.WriteLine(e.Index.ToString());
-
+        {        
             _dummyIndex++;
           
             PushButtonState itemState = 

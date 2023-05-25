@@ -10,7 +10,7 @@ using System.Globalization;
 
 namespace Honeycomb.UI.StronglyTypedControls.TextBoxes
 {
-    public abstract class NumericTextBox<TInput> : BaseComponents.MessageTextBox, INumericControl<TInput>, IStronglyTypedTextBox<TInput> where TInput: struct, IFormattable, IEquatable<TInput>
+    public abstract class NumericTextBox<TInput> : BaseComponents.MsgOnDisabledTextBox, INumericControl<TInput>, IStronglyTypedTextBox<TInput> where TInput: struct, IFormattable, IEquatable<TInput>
     {
        
         private TInput _value = new();

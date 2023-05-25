@@ -42,10 +42,10 @@
             label.AutoSize = true;
             label.BackColor = Color.Transparent;
             label.Highlighted = false;
-            label.Location = new Point(4, 5);
-            label.Margin = new Padding(4, 5, 0, 0);
+            label.Location = new Point(3, 3);
+            label.Margin = new Padding(3, 3, 0, 0);
             label.Name = "label";
-            label.Size = new Size(59, 25);
+            label.Size = new Size(38, 15);
             label.TabIndex = 0;
             label.Text = "label1";
             // 
@@ -61,7 +61,7 @@
             flowLayoutPanel1.Location = new Point(0, 0);
             flowLayoutPanel1.Margin = new Padding(0);
             flowLayoutPanel1.Name = "flowLayoutPanel1";
-            flowLayoutPanel1.Size = new Size(107, 36);
+            flowLayoutPanel1.Size = new Size(72, 21);
             flowLayoutPanel1.TabIndex = 0;
             // 
             // PinToggle
@@ -73,10 +73,10 @@
             PinToggle.CheckedImage = Properties.Resources.Pinned_Icon;
             PinToggle.Highlighted = false;
             PinToggle.IconColor = SystemColors.ControlText;
-            PinToggle.Location = new Point(63, 7);
-            PinToggle.Margin = new Padding(0, 7, 1, 7);
+            PinToggle.Location = new Point(41, 4);
+            PinToggle.Margin = new Padding(0, 4, 1, 4);
             PinToggle.Name = "PinToggle";
-            PinToggle.Size = new Size(19, 22);
+            PinToggle.Size = new Size(13, 13);
             PinToggle.TabIndex = 3;
             PinToggle.TabStop = false;
             PinToggle.UncheckedImage = Properties.Resources.Unpinned_Icon;
@@ -88,25 +88,24 @@
             CloseButton.BackgroundImageLayout = ImageLayout.Stretch;
             CloseButton.Highlighted = false;
             CloseButton.IconColor = SystemColors.ControlText;
-            CloseButton.Location = new Point(84, 7);
-            CloseButton.Margin = new Padding(1, 7, 4, 7);
+            CloseButton.Location = new Point(56, 4);
+            CloseButton.Margin = new Padding(1, 4, 3, 4);
             CloseButton.Name = "CloseButton";
-            CloseButton.Size = new Size(19, 22);
+            CloseButton.Size = new Size(13, 13);
             CloseButton.TabIndex = 4;
             CloseButton.TabStop = false;
             CloseButton.Click += CloseButton_Click;
             // 
             // HoneycombToolStripButtonBase
             // 
-            AutoScaleDimensions = new SizeF(10F, 25F);
+            AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             AutoSize = true;
             AutoSizeMode = AutoSizeMode.GrowAndShrink;
             BackColor = SystemColors.Control;
             Controls.Add(flowLayoutPanel1);
-            Margin = new Padding(4, 5, 4, 5);
             Name = "HoneycombToolStripButtonBase";
-            Size = new Size(107, 36);
+            Size = new Size(72, 21);
             flowLayoutPanel1.ResumeLayout(false);
             flowLayoutPanel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)PinToggle).EndInit();
