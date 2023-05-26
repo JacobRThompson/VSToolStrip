@@ -21,18 +21,15 @@ namespace Honeycomb.UI.StronglyTypedControls.TextBoxes
             set
             {
                 value ??= String.Empty; //Filter out null values
-                if (!value.Equals(_value))
-                {
-                    _value = value;
+                if (!value.Equals(_value)) { _value = value; }
 
-                    if (value.Equals(FAILED_VALIDATION))
-                    {
-                        Text = String.Empty;
-                    }
-                    else
-                    {
-                        Text = GenText(value);
-                    }
+                if (value.Equals(FAILED_VALIDATION))
+                {
+                    Text = String.Empty;
+                }
+                else
+                {
+                    Text = GenText(value);
                 }
             }
         }
