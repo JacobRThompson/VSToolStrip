@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
@@ -13,6 +14,15 @@ namespace Honeycomb.UI
 
     public class HoneycombComboBox : MsgOnDisabledComboBox
     {
+        /// <summary>
+        /// How long we wait after calling OnDropDownClosed before updating the DropDownOpened property. 
+        /// Used to work around jank caused by how WinForms handles differing drop down styles
+        /// </summary>
+        const int CLOSURE_GRACE_PERIOD_MS = 10;
+        private readonly Stopwatch _stopwatch = new();
+        private bool _dropDownOpened = false;
+
+        private readonly object _lock = new();
 
         //This is only used for ComboBoxes with DropDownStyle = DropDownList
         private (int Index, string Text, Rectangle Bounds) _lastHighlighted = (-1, string.Empty, Rectangle.Empty);
@@ -24,13 +34,45 @@ namespace Honeycomb.UI
 
         public HoneycombComboBox()
         {
-
             OnDropDownStyleChanged(EventArgs.Empty); //Initialize event handlers
+            _stopwatch.Start();
         }
 
         public event EventHandler<IsEmptyChangedEventArgs>? IsEmptyChanged;
 
-        public bool DropDownOpened { get; set; } = false;
+        public bool DropDownOpened 
+        {
+            get
+            {
+                lock(_lock)
+                {
+                    if (_dropDownOpened) 
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return _stopwatch.ElapsedMilliseconds <= CLOSURE_GRACE_PERIOD_MS;
+                    }
+                }
+            }
+            set 
+            {
+                lock (_lock)
+                {
+                    if (value)
+                    {
+                        _dropDownOpened = true;
+                    }
+                    else
+                    {
+                        _dropDownOpened = false;
+                        _stopwatch.Restart();                     
+                    }
+                }
+               
+            } 
+        }
 
         protected override void OnDropDownStyleChanged(EventArgs e)
         {
