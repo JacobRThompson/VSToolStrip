@@ -12,7 +12,7 @@ namespace Honeycomb.UI.StronglyTypedControls.TextBoxes
     {
         private string _value = string.Empty;
 
-        protected virtual string FAILED_VALIDATION { get => string.Empty; }
+        public virtual string FAILED_VALIDATION { get => string.Empty; }
 
         [Category(Globals.TYPED_CONTROL_ROOT_CATEGORY)]
         public virtual string Value

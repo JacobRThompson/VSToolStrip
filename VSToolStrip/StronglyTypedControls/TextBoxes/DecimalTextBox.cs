@@ -11,7 +11,7 @@ namespace Honeycomb.UI.StronglyTypedControls.TextBoxes
     [ToolboxItem(Globals.SHOW_BASE_COMPONENTS_IN_TOOLBOX)]
     public class DecimalTextBox : NumericTextBox<decimal>
     {
-        protected override decimal FAILED_VALIDATION => decimal.MinValue;
+        public override decimal FAILED_VALIDATION => decimal.MinValue;
 
         [Category(Globals.TYPED_CONTROL_ROOT_CATEGORY)]
         public NumberStyles InputStyle { get; set; } = NumberStyles.Currency;

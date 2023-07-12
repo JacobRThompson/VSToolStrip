@@ -35,6 +35,7 @@ namespace Honeycomb.UI.StronglyTypedControls.ComboBoxes
                 }
 
                 _values = value;
+                DropDownWidth = CalcDropDownWidth();
 
 #if !DEBUG 
                 OnIsEmptyChanged(new(_values.Count == 0));

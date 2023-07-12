@@ -11,7 +11,7 @@ namespace Honeycomb.UI.StronglyTypedControls.TextBoxes
     [ToolboxItem(Globals.SHOW_BASE_COMPONENTS_IN_TOOLBOX)]
     public class IntTextBox:NumericTextBox<int>
     {
-        protected override int FAILED_VALIDATION => int.MinValue;
+        public override int FAILED_VALIDATION => int.MinValue;
 
         [Category(Globals.TYPED_CONTROL_ROOT_CATEGORY)]
         public NumberStyles InputStyle { get; set; } = NumberStyles.Currency;

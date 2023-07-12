@@ -15,7 +15,7 @@ namespace Honeycomb.UI.StronglyTypedControls.TextBoxes
        
         private TInput _value = new();
      
-        protected virtual TInput FAILED_VALIDATION { get => throw new NotImplementedException(); }
+        public virtual TInput FAILED_VALIDATION { get => throw new NotImplementedException(); }
         protected virtual Func<TInput, bool> IsGreaterThanMin { get; } = (x) => throw new NotImplementedException();
         protected virtual Func<TInput, bool> IsLessThanMax { get; } = (x) => throw new NotImplementedException();
         protected virtual Func<TInput, bool> IsDivisibleByModulo { get; } = (x) => throw new NotImplementedException();

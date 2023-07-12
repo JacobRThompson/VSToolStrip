@@ -16,9 +16,9 @@ namespace Honeycomb.UI
     {
         /// <summary>
         /// How long we wait after calling OnDropDownClosed before updating the DropDownOpened property. 
-        /// Used to work around jank caused by how WinForms handles differing drop down styles
+        /// Used to work around jank caused by how WinForms handles differing drop down styles 
         /// </summary>
-        const int CLOSURE_GRACE_PERIOD_MS = 10;
+        const int CLOSURE_GRACE_PERIOD_MS = 25;
         private readonly Stopwatch _stopwatch = new();
         private bool _dropDownOpened = false;
 
@@ -39,6 +39,8 @@ namespace Honeycomb.UI
         }
 
         public event EventHandler<IsEmptyChangedEventArgs>? IsEmptyChanged;
+
+        
 
         public bool DropDownOpened 
         {
@@ -73,6 +75,7 @@ namespace Honeycomb.UI
                
             } 
         }
+
 
         protected override void OnDropDownStyleChanged(EventArgs e)
         {
@@ -191,6 +194,20 @@ namespace Honeycomb.UI
             ItemHeight = (int)this.Font.GetHeight() + this.Padding.Top + this.Padding.Bottom + 2;
 
            
+        }
+
+        public int CalcDropDownWidth()
+        {
+            int maxWidth = this.Width, currentWidth = 0;
+            foreach (var obj in Items)
+            {
+                currentWidth = TextRenderer.MeasureText(obj.ToString() + "  ", Font).Width;
+                if (currentWidth > maxWidth)
+                {
+                    maxWidth = currentWidth;
+                }
+            }
+            return maxWidth;
         }
     }
 
